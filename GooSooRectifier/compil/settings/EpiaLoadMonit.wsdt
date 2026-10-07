@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>EpiaLoadMonit/Release</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>562</Column0><Column1>0</Column1><Column2>27</Column2><Column3>1307876</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><ColumnWidth0>20</ColumnWidth0><ColumnWidth1>999</ColumnWidth1><ColumnWidth2>266</ColumnWidth2><ColumnWidth3>66</ColumnWidth3></Build>
+      <Debug-Log><PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows></Debug-Log>
+    <TerminalIO/><Profiling/><Disassembly><MixedMode>1</MixedMode><CodeCovEnabled>0</CodeCovEnabled><CodeCovShow>0</CodeCovShow></Disassembly><CodeCoveragePlugin/><Find-in-Files><ColumnWidth0>664</ColumnWidth0><ColumnWidth1>94</ColumnWidth1><ColumnWidth2>1138</ColumnWidth2></Find-in-Files></Static>
+    <Windows>
+      
+      
+    <Wnd2>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-7703-17978</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>EpiaLoadMonit</ExpandedNode><ExpandedNode>EpiaLoadMonit/Output</ExpandedNode><ExpandedNode>EpiaLoadMonit/src</ExpandedNode><ExpandedNode>EpiaLoadMonit/srcIAR</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd2><Wnd3><Tabs><Tab><Identity>TabID-19385-16059</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab><Tab><Identity>TabID-24086-29835</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab></Tabs><SelectedTab>1</SelectedTab></Wnd3></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane/><Pane><Tab><Factory>TextEditor</Factory><Filename>C:\KOOSOO\98-WORK(KooSoo)\04-&#xAC1C;&#xBC1C;&#xC790;&#xB8CC;\&#xAC1C;&#xBC1C;&#xC790;&#xB8CC;(&#xD558;&#xC601;&#xC0C1;&#xC774;&#xC0AC;)\KS0902_DCS03_v20\GooSooRectifier\src\CSLab_SAM7_ADC.c</Filename><XPos>0</XPos><YPos>32</YPos><SelStart>1135</SelStart><SelEnd>1135</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\workgroup_backup\GooSooRectifier\src\CSLab_SAM7_Usart1.c</Filename><XPos>0</XPos><YPos>219</YPos><SelStart>7746</SelStart><SelEnd>7746</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\workgroup_backup\GooSooRectifier\src\main.c</Filename><XPos>0</XPos><YPos>162</YPos><SelStart>4914</SelStart><SelEnd>4914</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\workgroup_backup\GooSooRectifier\src\CSLab_Rectifier_debug.c</Filename><XPos>0</XPos><YPos>507</YPos><SelStart>14851</SelStart><SelEnd>14851</SelEnd></Tab><ActiveTab>3</ActiveTab></Pane><ActivePane>1</ActivePane><Sizes><Pane><X>11966</X><Y>1000000</Y></Pane><Pane><X>988033</X><Y>1000000</Y></Pane></Sizes><SplitMode>4</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-028a5310><key>iaridepm.enu1</key></Toolbar-028a5310></Sizes></Row0></Top><Left><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>735</Bottom><Right>609</Right><x>-2</x><y>-2</y><xscreen>0</xscreen><yscreen>0</yscreen><sizeHorzCX>0</sizeHorzCX><sizeHorzCY>0</sizeHorzCY><sizeVertCX>318229</sizeVertCX><sizeVertCY>745197</sizeVertCY></Rect></Wnd2></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>209</Bottom><Right>1922</Right><x>-2</x><y>-2</y><xscreen>1924</xscreen><yscreen>211</yscreen><sizeHorzCX>1002083</sizeHorzCX><sizeHorzCY>213347</sizeHorzCY><sizeVertCX>0</sizeVertCX><sizeVertCY>0</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+
