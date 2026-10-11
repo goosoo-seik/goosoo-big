@@ -115,7 +115,8 @@ input[type=number] { width: 92px; }
 .range button { padding: 4px 9px; font-size: 12px; }
 .range button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 .cbox { position: relative; height: 230px; margin-top: 8px; }
-.cbox.status { height: 92px; }
+.cbox.status { height: 222px; }
+.cbox.noise { height: 170px; }
 .cbox canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; touch-action: pan-y; }
 .tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.12); white-space: nowrap; z-index: 2; }
 .tip .t { color: var(--fg2); margin-bottom: 2px; }
@@ -150,6 +151,70 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
 .loop .n small { color: var(--fg3); font-family: var(--f-num); }
 .loop .ar { color: var(--fg3); }
 .sample-badge { font-size: 11px; font-weight: 600; color: var(--warn); background: var(--warn-bg); border-radius: 4px; padding: 1px 6px; }
+
+/* PLC 명령 (2026-10-08 추가: [PLCCMD] 줄) */
+:root { --plc-bg: #ffd84a; --plc-fg: #3b2f00; --plc-line: #e3b800; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --plc-bg: #e2b81f; --plc-fg: #1d1700; --plc-line: #f2cc3a; } }
+:root[data-theme="dark"] { --plc-bg: #e2b81f; --plc-fg: #1d1700; --plc-line: #f2cc3a; }
+.plc { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; padding: 3px 12px; border-radius: 6px;
+  background: var(--plc-bg); color: var(--plc-fg); border: 1px solid var(--plc-line); font-variant-numeric: tabular-nums; max-width: 100%; }
+.plc .k { font-size: 11px; font-weight: 600; opacity: .75; letter-spacing: .04em; }
+.plc.dim { opacity: .55; }
+.plc.pnl { background: var(--panel); color: var(--fg); border-color: var(--plc-line); }
+.plc[hidden] { display: none; }
+/* 설정전류 0 확인 요청 ([SP0] 줄) */
+:root { --sp0-bg: #ff8a3d; --sp0-fg: #2b1000; --sp0-line: #e0661a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --sp0-bg: #e4732a; --sp0-fg: #1c0a00; --sp0-line: #ff9a55; } }
+:root[data-theme="dark"] { --sp0-bg: #e4732a; --sp0-fg: #1c0a00; --sp0-line: #ff9a55; }
+.plc.sp0 { background: var(--sp0-bg); color: var(--sp0-fg); border-color: var(--sp0-line); }
+.plc.sp0.done { opacity: .8; }
+
+/* 측정 노이즈 / 튜닝 (2026-10-08 추가: CSV 노이즈 열, [TUN] 줄) */
+:root { --s-nz: #7b4fc4; --s-nz2: #b48be8; --s-band: rgba(42, 120, 214, .16); --s-tun: #0d6f7a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --s-nz: #b28cf2; --s-nz2: #7d5cb8; --s-band: rgba(57, 135, 229, .24); --s-tun: #3fb2bf; } }
+:root[data-theme="dark"] { --s-nz: #b28cf2; --s-nz2: #7d5cb8; --s-band: rgba(57, 135, 229, .24); --s-tun: #3fb2bf; }
+.key.band { background: var(--s-band); height: 9px; border: 1px solid var(--s-in); }
+.key.nz { background: var(--s-nz); } .key.nz2 { background: var(--s-nz2); } .key.lim { background: var(--crit); }
+.key.spk { background: var(--warn); width: 8px; height: 8px; border-radius: 50%; }
+.key.tun { background: var(--s-tun); width: 2px; height: 12px; }
+.tune { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 16px; margin-top: 10px; }
+@media (max-width: 860px) { .tune { grid-template-columns: minmax(0, 1fr); } }
+.tgrid { display: grid; grid-template-columns: max-content max-content max-content minmax(0, 1fr); gap: 6px 10px; align-items: center; font-size: 12.5px; }
+.tgrid .hd { font-size: 11px; color: var(--fg2); font-weight: 600; }
+.tgrid .nm { font-family: var(--f-num); font-weight: 600; }
+.tgrid .nm small { display: block; font-family: var(--f-ui); font-weight: 400; color: var(--fg2); font-size: 11.5px; }
+.tgrid .cur { font-family: var(--f-num); font-variant-numeric: tabular-nums; color: var(--fg2); text-align: right; min-width: 48px; }
+.tgrid .cur.diff { color: var(--warn); font-weight: 600; }
+.tgrid .hint { color: var(--fg2); font-size: 12px; min-width: 0; }
+.tgrid input.chg { border-color: var(--warn); background: var(--warn-bg); }
+@media (max-width: 560px) {
+  .tgrid { grid-template-columns: minmax(0, 1fr) max-content max-content; }
+  .tgrid .hint { grid-column: 1 / -1; margin-top: -2px; }
+  .tgrid .hd.h4 { display: none; }
+}
+.diag li .act { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.diag li .act button { padding: 3px 9px; font-size: 12px; }
+.diag li .act code { font-family: var(--f-num); font-size: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; }
+
+/* 리셋 (2026-10-08 추가: [RST] 줄) */
+.tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .03em; padding: 1px 7px; border-radius: 4px; background: var(--chip-bg); color: var(--fg2); }
+.tag.warm { background: var(--good-bg); color: var(--good); }
+.tag.cold { background: var(--warn-bg); color: var(--warn); }
+.tag.test { background: var(--crit-bg); color: var(--crit); }
+.rst-card { margin-top: 12px; border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+.rst-card .rh { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.rst-card .rh b { font-size: 13px; font-weight: 600; }
+.rst-card .rh .when { margin-left: auto; color: var(--fg2); font-size: 12px; }
+.rst-kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 3px 12px; font-size: 12px; margin: 8px 0 0; }
+.rst-kv dt { color: var(--fg2); }
+.rst-kv dd { margin: 0; font-family: var(--f-num); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.rst-none { color: var(--fg3); font-size: 12.5px; margin-top: 4px; }
+.sec-t { font-size: 12px; font-weight: 600; color: var(--fg2); margin: 0 0 6px; }
+.rstlog { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 6px; max-height: 230px; overflow: auto; }
+.rstlog li { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 2px 10px; padding: 6px 10px; border-radius: 6px; background: var(--chip-bg); font-size: 12.5px; }
+.rstlog .ts { font-family: var(--f-num); font-variant-numeric: tabular-nums; color: var(--fg2); font-size: 12px; white-space: nowrap; }
+.rstlog .tx { min-width: 0; overflow-wrap: anywhere; }
+.rstlog .sub2 { grid-column: 2; color: var(--fg2); font-size: 12px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -161,9 +226,15 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
     </div>
     <div class="src">
       <label class="lbl" for="baud">속도</label>
-      <select id="baud"><option>9600</option><option>19200</option><option selected>38400</option><option>57600</option><option>115200</option></select>
+      <select id="baud"><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option selected>115200</option></select>
       <button id="btnConnect" class="primary" type="button">보드 연결</button>
+      <button id="btnSim" type="button" title="PC 시뮬레이터(Documents\lotte_dcs, lotte_dcs.exe 0 web)에 연결 — 펌웨어 UART 줄을 실시간으로 받음">시뮬레이터 연결</button>
       <button id="btnDisconnect" type="button" hidden>연결 끊기</button>
+      <button id="btnRstQ" type="button" hidden title="보드에 RST? 를 보내 마지막 리셋 보고를 다시 받습니다 (RxD1 배선 필요)">리셋 보고 요청</button>
+      <button id="btnWdt" type="button" hidden title="보드에 !WDT 를 보내 워치독 리셋을 일으킵니다 (시험용, RxD1 배선 필요)">워치독 시험</button>
+      <button id="btnAuto" type="button" hidden title="PC 파일을 하나 지정하면 받은 줄을 PC 시간과 함께 계속 이어 씁니다 (5초마다, [RST] 는 즉시)">자동 저장</button>
+      <button id="btnSaveLog" type="button" title="지금까지 받은 모든 줄을 PC 시간과 함께 .txt 로 저장">수신 로그 저장</button>
+      <button id="btnSaveRst" type="button" title="리셋 기록을 .csv 로 저장 (엑셀)">리셋 기록 저장</button>
       <label class="lbl" for="fileIn" style="display:none">로그 파일</label>
       <input id="fileIn" type="file" accept=".log,.txt,.csv,text/plain" hidden>
       <button id="btnFile" type="button">로그 파일 열기</button>
@@ -180,6 +251,8 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
         <span id="chipMode" class="chip">–</span>
         <span id="chipStable" class="chip">–</span>
         <span id="chipAlarm" class="chip">–</span>
+        <span id="chipPlc" class="plc dim"><span class="k" id="plcKey">PLC</span><span id="plcTxt">–</span></span>
+        <span id="chipSp0" class="plc sp0" hidden><span class="k">SP0</span><span id="sp0Txt"></span></span>
         <span class="when" id="when">–</span>
       </div>
       <div class="flow" id="flow">
@@ -192,10 +265,21 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
         <span>adc_amp <b id="mAdcA">–</b></span>
         <span>adc_volt <b id="mAdcV">–</b></span>
         <span>drop <b id="mDrop">–</b></span>
+        <span>ADC <b id="mFs">–</b></span>
+        <span>노이즈 σ <b id="mNz">–</b></span>
+        <span>스파이크 <b id="mSpk">–</b></span>
+        <span>|fResult| 최소 <b id="mRes">–</b></span>
+        <span>소프트스타트 <b id="mSoft">–</b></span>
       </div>
+      <div class="rst-card" id="rstCard" aria-live="polite"></div>
     </div>
     <div class="panel">
       <div class="rhead"><h2>판독</h2><span class="when">차트에 마우스를 올리면 그 시점을 판독합니다</span></div>
+      <p class="sec-t">리셋 기록 <span class="lbl">· [RST] 수신 · 왼쪽 시각 = PC 시스템 시간</span></p>
+      <ul class="rstlog" id="rstLog"></ul>
+      <p class="sec-t">운전 · 키 · 상태 기록 <span class="lbl">· [KEY] [RUN] [EV] [ZERO] [SPDROP] [HUNT] [STEP] · 왼쪽 = 보드 시간 t</span></p>
+      <ul class="rstlog" id="keyLog"></ul>
+      <p class="sec-t">선택 시점 판독</p>
       <ul class="diag" id="diag"></ul>
     </div>
   </section>
@@ -203,7 +287,7 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
   <section class="panel charts">
     <div class="ctop">
       <h2>전류 <span class="lbl">[A]</span></h2>
-      <div class="legend"><span><span class="key ref"></span>amp_ref 기준</span><span><span class="key in"></span>amp_in 측정</span><span><span class="key out"></span>amp_out 지령 (CC 구간만)</span></div>
+      <div class="legend"><span><span class="key ref"></span>amp_ref 기준 (정지 중 흐린 점선 = 멈추기 전 마지막 값)</span><span><span class="key in"></span>amp_in 측정</span><span><span class="key out"></span>amp_out 지령 (CC 구간만)</span><span><span class="key band"></span>원시 샘플 최소~최대 (0.5초 창, 필터 전)</span><span><span class="key tun"></span>튜닝 변경</span></div>
       <div class="range" role="group" aria-label="표시 구간">
         <button type="button" data-range="0" aria-pressed="true">전체</button>
         <button type="button" data-range="600">10분</button>
@@ -218,10 +302,40 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
     </div>
     <div class="cbox" id="boxV"><canvas id="cV" aria-label="전압 기준, 측정, 지령 추이"></canvas></div>
     <div class="ctop">
-      <h2>상태</h2>
-      <div class="legend"><span>운전 = step ≥ 10</span><span>안정 = stable 1</span><span>알람 = alarm 또는 adc_err ≠ 0</span></div>
+      <h2>측정 노이즈 <span class="lbl">[A] · 0.5초 창</span></h2>
+      <div class="legend"><span><span class="key nz"></span>amp_nz 원시 샘플 σ</span><span><span class="key nz2"></span>3σ ÷ √<span class="avgN">24</span> (<span class="avgN">24</span>개 평균 후 = 안정 판정 입력)</span><span><span class="key lim"></span>안정 오차 한계 amp_ref × stb_err</span><span><span class="key spk"></span>스파이크 대체</span></div>
     </div>
-    <div class="cbox status" id="boxS"><canvas id="cS" aria-label="운전, 안정, 알람 상태 띠"></canvas></div>
+    <div class="cbox noise" id="boxN"><canvas id="cN" aria-label="전류 측정 노이즈와 안정 판정 한계 추이"></canvas></div>
+    <div class="ctop">
+      <h2>상태</h2>
+      <div class="legend"><span>운전 = step ≥ 10</span><span>안정 = stable 1</span><span>오차 OK = <span class="avgN">24</span>개 평균 오차 ≤ stb_err</span><span>증분 OK = |fResult| 최소 &lt; stb_res</span><span>램프 = 소프트스타트 진행 중 (soft &lt; 100%)</span><span>PID = PID 구간 (pid 1)</span><span>알람 = alarm 또는 adc_err ≠ 0</span></div>
+    </div>
+    <div class="cbox status" id="boxS"><canvas id="cS" aria-label="운전, 안정, 안정 판정 조건, 스파이크, 알람 상태 띠"></canvas></div>
+  </section>
+
+  <section class="panel" id="tunePanel">
+    <div class="ctop">
+      <h2>튜닝 <span class="lbl">UART TUN 명령 · 보드 RAM에만 적용, 리셋하면 기본값</span></h2>
+      <div class="src">
+        <button id="btnTunRead" type="button" title="보드에 TUN? 을 보내 현재 값을 받습니다">보드 값 읽기</button>
+        <button id="btnTunApply" class="primary" type="button" title="보드 값과 다른 칸만 TUN 이름=값 으로 보냅니다">바뀐 값 적용</button>
+        <button id="btnTunReset" type="button" title="입력 칸을 보드 값으로 되돌립니다 (보내지 않음)">입력 되돌리기</button>
+        <button id="btnTunDef" type="button" title="보드에 TUN DEF 를 보내 기본값(원래 동작)으로 돌립니다">보드 기본값</button>
+      </div>
+    </div>
+    <p class="lbl" id="tunState" style="margin:6px 0 0"></p>
+    <div class="tune">
+      <div>
+        <p class="sec-t">값 <span class="lbl">· 보드 = 마지막 [TUN] 줄</span></p>
+        <div class="tgrid" id="tgrid"></div>
+      </div>
+      <div>
+        <p class="sec-t">로그 기반 제안 <span class="lbl" id="sugWin"></span></p>
+        <ul class="diag" id="sugg"></ul>
+        <p class="sec-t" style="margin-top:14px">튜닝 기록 <span class="lbl">· 왼쪽 = 보드 시간 t</span></p>
+        <ul class="rstlog" id="tunLog"></ul>
+      </div>
+    </div>
   </section>
 
   <section class="panel">
@@ -268,6 +382,20 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
         <dt>adc_err</dt><dd>0 정상, 1 AD7705 응답 없음, 2 ADC 상태머신 이상.</dd>
         <dt>alarm · drop</dt><dd>alarm은 활성 알람 개수 합(비트마스크 아님). drop은 송신 버퍼가 차서 버린 디버그 줄 수.</dd>
       </dl>
+      <dl>
+        <dt>amp_avg</dt><dd><span class="avgN">24</span>개 이동평균 전류(보드 AVERAGE_NO, small 24 · backup 12). 표시·PLC 전송과 CC 안정 판정 오차에 쓰는 값입니다. (아래 열은 펌웨어 ADC_NOISE_LOG)</dd>
+        <dt>amp_min · amp_max</dt><dd>0.5초 창 안 원시 샘플(스파이크 필터 전) 최소·최대. 전류 차트의 파란 띠입니다.</dd>
+        <dt>amp_nz · volt_nz</dt><dd>연속 샘플 차이로 구한 노이즈 표준편차 σ(전압은 mV). 느린 상승·하강은 거의 들어가지 않습니다. <span class="avgN">24</span>개 평균 후에는 σ÷√<span class="avgN">24</span>.</dd>
+        <dt>spk_a · spk_v</dt><dd>창 안에서 스파이크로 판정해 직전 평균으로 바꾼 샘플 수. 필터가 꺼져 있으면 0.</dd>
+        <dt>pid_res</dt><dd>창 안 PID 증분 |fResult| 최소. 안정 판정 마지막 조건(&lt; stb_res, 원래 1). −1이면 PID 구간이 아님.</dd>
+        <dt>adc_n</dt><dd>창 안 ADC 샘플 수. ÷ 줄 간격(기본 0.5초, 펌웨어 'LOG n' 이면 n×0.1초) = 초당 샘플 수 = 제어 주기.</dd>
+        <dt>ctl_a · res</dt><dd>(현장 로그 FIELD_LOG) 제어에 실제 쓰인 전류 측정값 fAmpInAbs 와 이번 제어 변화량 fResult. amp_in 은 표시용 24개 평균.</dd>
+        <dt>user · sel</dt><dd>user = 펌웨어가 쓰는 LOCAL(0)/REMOTE(1), sel = 선택 스위치 실제 위치. 운전 중 스위치를 돌리면 sel 만 바뀌고 user 는 정지 후에 바뀜(전환 보류).</dd>
+        <dt>plc_word · plc_sp · plc_live · com</dt><dd>PLC 제어워드(생존 비트 0x8000 포함), PLC 설정전류, 생존 비트 변화 횟수(늘어나면 PLC 정상), Anybus 통신 정상.</dd>
+        <dt>vlim · toterr · ext</dt><dd>전압 제한 동작(PidOver), TotalError, 외부입력 원시 워드.</dd>
+        <dt>soft · pid</dt><dd>soft = 소프트스타트 진행률 % (iRiseTime ÷ 시동시간, 정지·시작 때 0), pid = 1 이면 PID 구간. 램프 도중 pid 가 1 이 되면 amp_in 이 설정 90%에 먼저 닿은 것입니다 (펌웨어 DBG_SOFT_LOG).</dd>
+        <dt>정지 중 amp_ref</dt><dd>fRefAmp 는 운전 중 CC 제어 단계에서만 갱신되어 STOP 뒤에는 마지막 값이 남습니다. 차트에서는 흐린 점선으로 그립니다.</dd>
+      </dl>
     </div>
     <div class="src" style="margin-top:14px">
       <span class="lbl">정격 (판독 % 계산용)</span>
@@ -302,7 +430,7 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
   };
   $('ratedA').value = store.get('dcs.ratedA', '75000');
   $('ratedV').value = store.get('dcs.ratedV', '75');
-  $('baud').value = store.get('dcs.baud', '38400');
+  $('baud').value = store.get('dcs.baud', '115200');
   const ratedA = () => Math.max(1, +$('ratedA').value || 75000);
   const ratedV = () => Math.max(0.1, +$('ratedV').value || 75);
 
@@ -311,22 +439,557 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
     't_ms': 't', 'step': 'step', 'mode': 'mode', 'stable': 'stable',
     'adc_amp': 'adcA', 'amp_ref': 'aRef', 'amp_in': 'aIn', 'amp_out': 'aOut',
     'adc_volt': 'adcV', 'volt_ref': 'vRef', 'volt_in': 'vIn', 'volt_out': 'vOut',
-    'adc_err': 'err', 'alarm': 'alarm', 'drop': 'drop'
+    'adc_err': 'err', 'alarm': 'alarm', 'drop': 'drop',
+    // 2026-10-08 추가: 노이즈 열 (펌웨어 ADC_NOISE_LOG). 없으면 null
+    'amp_avg': 'aAvg', 'amp_min': 'aMin', 'amp_max': 'aMax', 'amp_nz': 'aNz', 'volt_nz': 'vNz',
+    'spk_a': 'spkA', 'spk_v': 'spkV', 'pid_res': 'res', 'adc_n': 'adcN',
+    // 2026-10-08 추가: 소프트스타트 진행률 / PID 구간 (펌웨어 DBG_SOFT_LOG)
+    'soft': 'soft', 'pid': 'pid',
+    // 2026-10-11 추가: 현장 로그 열 (펌웨어 FIELD_LOG)
+    'ctl_a': 'ctlA', 'res': 'fRes', 'user': 'user', 'sel': 'sel', 'run': 'run', 'plc_word': 'plcW', 'plc_sp': 'plcSp',
+    'plc_live': 'plcLive', 'com': 'com', 'vlim': 'vlim', 'toterr': 'totErr', 'ext': 'ext'
   };
+  // 2026-10-08 변경: 같은 헤더가 다시 오면 (펌웨어가 20초마다 다시 보냄) 새 부팅 구간을 만들지 않음.
+  //   부팅이 바뀐 것은 t_ms 가 줄어드는 것으로 따로 판단함 (feedLine)
+  let colsGuessed = false;    // 헤더 없이 열 개수로 추정한 상태
   function setHeader(line) {
-    cols = line.split(',').map(s => s.trim());
+    const nc = line.split(',').map(s => s.trim());
+    if (cols && nc.join(',') === cols.join(',')) { if (colsGuessed) { colsGuessed = false; note(''); } return; }
+    const keep = colsGuessed && cols && nc.length === cols.length && sessions.length;   // 추정했던 열과 개수가 같으면 그 구간을 이어 씀
+    cols = nc;
+    colsGuessed = false;
     voltScale = cols.some(c => /^volt_.*\[0\.01V\]/.test(c)) ? 0.01 : 1;
-    sessions.push({ rows: [] });
+    if (!keep) sessions.push({ rows: [] });
+  }
+  // 2026-10-08 추가: 헤더를 못 받은 채 연결했을 때 (보드가 이미 돌고 있을 때) 숫자 줄의 칸 개수로 형식 추정
+  //   기본 15칸 / +소프트스타트 2칸 = 17 / +노이즈 9칸 = 24 / 둘 다 = 26 (펌웨어 dbg_status_log 순서)
+  const HDR_BASE = 't_ms,step,mode,stable,adc_amp,amp_ref[A],amp_in[A],amp_out[A],adc_volt,volt_ref[V],volt_in[V],volt_out[V],adc_err,alarm,drop';
+  const HDR_NZ = ',amp_avg[A],amp_min[A],amp_max[A],amp_nz[A],volt_nz[mV],spk_a,spk_v,pid_res,adc_n', HDR_SOFT = ',soft[%],pid';
+  const HDR_FIELD = ',ctl_a,res,user,sel,run,plc_word,plc_sp,plc_live,com,vlim,toterr,ext';   // 2026-10-11 추가 (FIELD_LOG, +12칸)
+  const HDR_BY_COUNT = { 15: HDR_BASE, 17: HDR_BASE + HDR_SOFT, 24: HDR_BASE + HDR_NZ, 26: HDR_BASE + HDR_NZ + HDR_SOFT,
+    27: HDR_BASE + HDR_FIELD, 29: HDR_BASE + HDR_SOFT + HDR_FIELD, 36: HDR_BASE + HDR_NZ + HDR_FIELD, 38: HDR_BASE + HDR_NZ + HDR_SOFT + HDR_FIELD };
+  function guessHeader(line) {
+    if (!/^\d+(,-?[\d.]+)+$/.test(line)) return false;
+    const h = HDR_BY_COUNT[line.split(',').length];
+    if (!h) return false;
+    setHeader(h);
+    colsGuessed = true;
+    note('헤더 줄 없이 연결되어 칸 개수(' + cols.length + '칸)로 형식을 추정해 그리는 중입니다. 펌웨어가 헤더를 다시 보내면(20초 주기) 자동으로 확정됩니다.');
+    return true;
   }
   function pushMsg(line) {
     otherMsgs.push(line);
     if (otherMsgs.length > 80) otherMsgs.shift();
   }
+
+  // ---------- [RST] 리셋 보고 (2026-10-08 추가, CSLab_Rectifier_reset.c) ----------
+  //   [RST] cold|warm reset : 원인          → 새 리셋 기록
+  //   [RST] info ... / [RST] prev ...       → 바로 앞 기록의 상세
+  //   [RST] warm stable : ...               → 웜 복귀 결과
+  //   [RST] last ...                        → 주기 요약 (늦게 연결했을 때 기록이 없으면 이걸로 만듦)
+  //   [RST] test : ...                      → 시험 명령 수신
+  let resets = [];            // [{pc, kind, cause, info, prev, stable, lastSeen, summary}]
+  let live = false;           // 보드 연결 중이면 줄마다 PC 시간 기록
+  const TYPE_KO = { 0: '전원투입', 2: '워치독', 3: '소프트웨어', 4: 'NRST 핀', 5: '저전압(BOD)' };
+  const WHY_KO = {
+    'ok': '웜 조건 충족', 'WARM_RESTART off': '웜 기능 꺼짐 (WARM_RESTART 주석)', 'reset type (RAM not kept)': 'RAM이 유지되지 않는 리셋',
+    'no valid RAM state': 'RAM 직전 상태가 유효하지 않음', 'reset during boot init': '부팅 초기화 중 리셋', 'was stopped': '리셋 전 정지 상태',
+    'was LOCAL': '리셋 전 LOCAL 운전', 'fault active': '리셋 전 고장 상태', 'warm limit reached': '연속 웜 횟수 초과'
+  };
+  function kv(s) { const o = {}; s.replace(/(\w+)=(\S+)/g, (m, k, v) => { o[k] = v; return m; }); return o; }
+  function curRst() { if (!resets.length) resets.push({ pc: null, kind: '?', cause: '(요약 줄 앞부분 누락)', info: {} }); return resets[resets.length - 1]; }
+  function parseRst(line) {
+    const now = live ? new Date() : null;
+    let m;
+    if ((m = line.match(/^\[RST\]\s+(cold|warm) reset\s*:\s*(.*)$/))) {
+      resets.push({ pc: now, kind: m[1], cause: m[2], info: {}, prev: null, stable: null });
+      if (resets.length > 200) resets.shift();
+      return;
+    }
+    if ((m = line.match(/^\[RST\]\s+info\s+(.*)$/))) {
+      const e = curRst(), o = kv(m[1]);
+      const rtc = m[1].match(/rtc=(\S+ \S+)/), why = m[1].match(/why=(.*)$/);
+      if (rtc) o.rtc = rtc[1];
+      if (why) o.why = why[1].trim();
+      e.info = o; return;
+    }
+    if (/^\[RST\]\s+prev\s+none/.test(line)) { curRst().prev = 'none'; return; }
+    if ((m = line.match(/^\[RST\]\s+prev\s+(.*)$/))) { curRst().prev = kv(m[1]); return; }
+    if ((m = line.match(/^\[RST\]\s+warm stable\s*:\s*(.*)$/))) { const e = curRst(); e.stable = kv(m[1]); e.stablePc = now; return; }
+    if ((m = line.match(/^\[RST\]\s+fix\s+(.*)$/))) { curRst().fix = m[1]; return; }
+    if ((m = line.match(/^\[RST\]\s+opt\s+(.*)$/))) { curRst().opt = m[1]; return; }
+    if ((m = line.match(/^\[RST\]\s+test\s*:\s*(.*)$/))) { resets.push({ pc: now, kind: 'test', cause: m[1], info: {} }); return; }
+    if ((m = line.match(/^\[RST\]\s+last\s+(.*)$/))) {
+      const o = kv(m[1]);
+      const rtc = m[1].match(/rtc=(\S+ \S+)/), why = m[1].match(/why=(.*?)\s+rtc=/), kind = m[1].match(/\b(warm|cold)\b/);
+      if (rtc) o.rtc = rtc[1];
+      if (why) o.why = why[1];
+      const same = resets.slice().reverse().find(e => e.info && e.info.boot === o.boot && e.info.rtc === o.rtc);
+      if (same) { same.lastSeen = now; same.up = o.up; return; }
+      resets.push({ pc: now, kind: kind ? kind[1] : '?', cause: (TYPE_KO[+o.type] || 'type ' + o.type) + ' (주기 요약으로 확인)', info: { boot: o.boot, type: o.type, rtc: o.rtc, why: o.why }, prev: null, stable: null, summary: true, up: o.up });
+    }
+  }
+  const pad2 = (n) => (n < 10 ? '0' : '') + n;
+  function fmtPc(d, withDate) {
+    if (!d) return null;
+    const t = pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds());
+    return withDate ? d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()) + ' ' + t : t;
+  }
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function rstTitle(e) {
+    const t = e.info && e.info.type !== undefined ? TYPE_KO[+e.info.type] : null;
+    const st = (e.cause || '').match(/at stage (\d+) (\S+)/);
+    return (t || e.cause.replace(/\s*\/\s*not warm:.*$/, '')) + (st ? ' · stage ' + st[1] + ' ' + st[2] : '');
+  }
+  function renderRst() {
+    // 왼쪽: 마지막 리셋 카드 (warm / cold)
+    const card = $('rstCard');
+    const last = resets.slice().reverse().find(e => e.kind !== 'test');
+    if (!last) {
+      card.innerHTML = '<div class="rh"><span class="tag">RESET</span><b>리셋 보고 없음</b></div><div class="rst-none">부팅하면 [RST] 줄이 들어옵니다. 보드를 늦게 연결했으면 1분 안에 [RST] last 요약이 오거나, 리셋 보고 요청 버튼을 누르세요.</div>';
+    } else {
+      const i = last.info || {}, p = last.prev, s = last.stable;
+      const rows = [];
+      rows.push(['판정', last.kind === 'warm' ? '웜 리스타트 · 직전 출력으로 바로 복귀' : last.kind === 'cold' ? '일반(cold) 부팅 · ' + esc(WHY_KO[i.why] || i.why || '') : '?']);
+      rows.push(['리셋 종류', esc((TYPE_KO[+i.type] || '?') + (i.rsr ? ' · RSR ' + i.rsr : ''))]);
+      const st = (last.cause || '').match(/at stage (\d+) (\S+)/);
+      if (st) rows.push(['리셋 위치', esc('stage ' + st[1] + ' · ' + st[2])]);
+      if (i.rtc) rows.push(['DCS 시각', esc(i.rtc)]);
+      rows.push(['PC 수신', esc(fmtPc(last.pc, true) || '시간 없음 (로그 파일)')]);
+      if (i.boot) rows.push(['부팅 번호', esc(i.boot + ' (전원투입 = 1)')]);
+      if (i.warm) rows.push(['연속 웜', esc(i.warm)]);
+      if (p === 'none') rows.push(['직전 상태', 'RAM에 없음 (전원투입·저전압 또는 RAM 손상)']);
+      else if (p) rows.push(['직전 상태', esc((p.run === '1' ? '운전' : '정지') + ' · ' + p.user + ' · ' + p.mode + ' · 측정 ' + p.amp + 'A / 설정 ' + p.set + 'A / 지령 ' + p.out + 'A · 고장 ' + p.fault + ' 알람 ' + p.alarm + ' · 운전 ' + p.runtime + 's')]);
+      if (last.kind === 'warm') {
+        if (s) rows.push(['복귀 결과', esc('측정 ' + s.amp + 'A / 설정 ' + s.set + 'A (오차 ' + s.err + ') · 지령 ' + s.out + 'A · PLC 통신 ' + (s.com === '1' ? '정상' : '대기') + ' · 설정값 ' + (s.plc_sp === 'live' ? 'PLC 수신' : '직전값 유지'))]);
+        else rows.push(['복귀 결과', '[RST] warm stable 대기 중']);
+      }
+      if (last.fix) rows.push(['보완 스위치', esc(last.fix)]);
+      if (last.opt) rows.push(['리모트 처리', esc(last.opt)]);
+      if (last.summary) rows.push(['참고', '부팅 보고를 놓쳐 주기 요약([RST] last)으로 만든 기록입니다']);
+      card.innerHTML = '<div class="rh"><span class="tag ' + esc(last.kind) + '">' + esc(last.kind.toUpperCase()) + '</span><b>' + esc(rstTitle(last)) + '</b><span class="when">' + esc(fmtPc(last.pc) || '') + '</span></div>'
+        + '<dl class="rst-kv">' + rows.map(r => '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>').join('') + '</dl>';
+    }
+    // 오른쪽: 리셋 기록 (PC 시간)
+    const ul = $('rstLog');
+    if (!resets.length) { ul.innerHTML = '<li><span class="ts">–</span><span class="tx">수신된 [RST] 없음</span></li>'; return; }
+    ul.innerHTML = resets.slice().reverse().map(e => {
+      const i = e.info || {};
+      let sub = '';
+      if (e.kind === 'cold') sub = '웜 안 함: ' + (WHY_KO[i.why] || i.why || '?');
+      if (e.kind === 'warm') sub = e.stable ? '복귀 ' + e.stable.amp + 'A / ' + e.stable.set + 'A · 오차 ' + e.stable.err : '복귀 결과 대기';
+      if (i.rtc) sub += (sub ? ' · ' : '') + 'DCS ' + i.rtc;
+      return '<li><span class="ts">' + esc(fmtPc(e.pc, true) || '파일') + '</span><span class="tx"><span class="tag ' + esc(e.kind) + '">' + esc(e.kind.toUpperCase()) + '</span> ' + esc(e.kind === 'test' ? e.cause : rstTitle(e)) + '</span>'
+        + (sub ? '<span class="sub2">' + esc(sub) + '</span>' : '') + '</li>';
+    }).join('');
+  }
+
+  // ---------- PC 저장 (2026-10-08 추가: FLASH 대신 PC 에 기록) ----------
+  let rawLog = [];            // [{pc, line}] 받은 모든 줄
+  const RAW_MAX = 500000;
+  const ROW_MAX = 300000;     // 2026-10-11 추가: 부팅 구간 하나에 화면용으로 들고 있는 CSV 줄 수 (0.1초 주기 약 8시간, 0.5초 주기 약 42시간)
+  let autoHandle = null, autoBuf = '', autoTimer = 0, autoBusy = false;
+  function stamp(d) { return d ? fmtPc(d, true) + '.' + String(d.getMilliseconds()).padStart(3, '0') : '-'; }
+  function download(name, text, type) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['﻿' + text], { type: type }));
+    a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+  function fileStamp() { const d = new Date(); return d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate()) + '_' + pad2(d.getHours()) + pad2(d.getMinutes()) + pad2(d.getSeconds()); }
+  function rawText() { return rawLog.map(r => stamp(r.pc) + '\t' + r.line).join('\r\n') + '\r\n'; }
+  function rstCsv() {
+    const q = (v) => { v = v == null ? '' : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+    const head = ['pc_time', 'kind', 'type', 'type_name', 'stage', 'cause', 'why', 'dcs_rtc', 'boot', 'warm', 'rsr',
+      'prev_run', 'prev_user', 'prev_mode', 'prev_fault', 'prev_alarm', 'prev_amp', 'prev_set', 'prev_out', 'prev_runtime',
+      'stable_amp', 'stable_set', 'stable_out', 'stable_err', 'stable_com', 'stable_plc_sp', 'fix'];
+    const rows = resets.map(e => {
+      const i = e.info || {}, p = (e.prev && e.prev !== 'none') ? e.prev : {}, s = e.stable || {};
+      const st = (e.cause || '').match(/at stage (\d+) (\S+)/);
+      return [stamp(e.pc), e.kind, i.type, TYPE_KO[+i.type] || '', st ? st[1] + ' ' + st[2] : '', e.cause, WHY_KO[i.why] || i.why, i.rtc, i.boot, i.warm, i.rsr,
+        p.run, p.user, p.mode, p.fault, p.alarm, p.amp, p.set, p.out, p.runtime,
+        s.amp, s.set, s.out, s.err, s.com, s.plc_sp, e.fix].map(q).join(',');
+    });
+    return head.join(',') + '\r\n' + rows.join('\r\n') + '\r\n';
+  }
+  async function autoFlush() {
+    autoTimer = 0;
+    if (!autoHandle || !autoBuf || autoBusy) return;
+    autoBusy = true;
+    const text = autoBuf; autoBuf = '';
+    try {
+      const f = await autoHandle.getFile();
+      const w = await autoHandle.createWritable({ keepExistingData: true });
+      await w.seek(f.size); await w.write(text); await w.close();
+    } catch (e) { autoBuf = text + autoBuf; note('자동 저장 오류: ' + (e && e.message ? e.message : e)); }
+    autoBusy = false;
+    if (autoBuf && !autoTimer) autoTimer = setTimeout(autoFlush, 5000);
+  }
+  function autoAdd(line, now, urgent) {
+    if (!autoHandle) return;
+    autoBuf += stamp(now) + '\t' + line + '\r\n';
+    if (urgent) { if (autoTimer) clearTimeout(autoTimer); autoTimer = setTimeout(autoFlush, 50); }
+    else if (!autoTimer) autoTimer = setTimeout(autoFlush, 5000);
+  }
+
+  // ---------- [PLCCMD] PLC 명령 상태 (2026-10-08 추가, CSLab_Rectifier_profi.c plc_cmd_report) ----------
+  //   바뀔 때만 들어옴. t 는 CSV t_ms 와 같은 기준 → 차트에서 고른 시점의 명령 상태를 표시
+  let plcEvents = [];         // [{sess, t(초), kv, raw, pc}]
+  let sp0Events = [];         // [SP0] 설정전류 0 보류/적용 (2026-10-08 추가, CSLab_Rectifier_profi.c remote_sp0_hold)
+  function evSess(t, key) {   // 이벤트 시각 t 가 어느 부팅 구간인지 (key: 구간별 마지막 시각 이름)
+    const s = sessions[sessions.length - 1];
+    const lastT = s ? Math.max(s.rows.length ? s.rows[s.rows.length - 1].t : -1, s[key] == null ? -1 : s[key]) : -1;
+    if (!s || t < lastT) return sessions.length;    // 시간이 되돌아감 = 새 부팅 (다음 헤더의 구간)
+    s[key] = t;
+    return sessions.length - 1;
+  }
+  function parsePlc(line, now) {
+    const o = kv(line.replace(/^\[PLCCMD\]\s*/, ''));
+    const t = (+o.t || 0) / 1000;
+    plcEvents.push({ sess: evSess(t, 'lastPlcT'), t: t, kv: o, raw: line, pc: now });
+    if (plcEvents.length > 20000) plcEvents.shift();
+  }
+  function parseSp0(line, now) {
+    const m = line.match(/^\[SP0\]\s+(\w+)\s*(.*)$/);
+    if (!m) return;
+    const o = kv(m[2]);
+    const t = (+o.t || 0) / 1000;
+    sp0Events.push({ sess: evSess(t, 'lastSp0T'), t: t, kind: m[1], kv: o, raw: line, pc: now });
+    if (sp0Events.length > 5000) sp0Events.shift();
+  }
+  function evAt(list, sessIdx, tSec) {
+    for (let i = list.length - 1; i >= 0; i--) {
+      const e = list[i];
+      if (e.sess !== sessIdx) continue;
+      if (tSec == null || e.t <= tSec + 1e-6) return e;
+    }
+    return null;
+  }
+  const plcAt = (sessIdx, tSec) => evAt(plcEvents, sessIdx, tSec);
+  function plcText(o) {
+    if (o.user !== 'REMOTE') return '패널 운전 · PLC 명령 무시';
+    if (o.com !== '1') return '통신 없음';
+    let cmd = o.stop === '1' ? 'STOP' : o.start === '1' ? 'RUN' : '대기';
+    const parts = [cmd, (+o.set).toLocaleString('en-US') + 'A'];
+    if (o.dir === '1') parts.push('역방향');
+    if (o.emeg === '1') parts.push('비상정지');
+    if (o.clear === '1') parts.push('리셋');
+    if (o.live === 'lost') parts.push('생존 끊김');
+    if (o.arm === 'wait') parts.push('재기동 대기(시작 0→1 필요)');
+    return parts.join(' · ');
+  }
+  function renderPlc(rows, idx) {
+    const el = $('chipPlc'), tx = $('plcTxt'), lb = $('plcKey');
+    const si = curSession < 0 ? sessions.length - 1 : curSession;
+    const r = rows[idx];
+    const tSel = r ? r.t : null;
+    let e = r ? plcAt(si, r.t) : null;
+    if (!e && !rows.length) e = plcEvents[plcEvents.length - 1] || null;
+    renderSp0(r ? si : (e ? e.sess : si), tSel, e);
+    if (!e) {
+      const later = plcEvents.some(x => x.sess === si);
+      lb.textContent = 'PLC';
+      tx.textContent = later ? '이 시점 이전 정보 없음' : '명령 수신 없음';
+      el.className = 'plc dim'; el.title = '[PLCCMD] 줄이 아직 없습니다. 보드 펌웨어의 DBG_PLCCMD 스위치를 확인하세요.';
+      return;
+    }
+    const pnl = e.kv.user !== 'REMOTE';
+    lb.textContent = pnl ? 'PNL' : 'PLC';
+    tx.textContent = plcText(e.kv);
+    el.className = 'plc' + (pnl ? ' pnl' : (e.kv.com === '1' ? '' : ' dim'));
+    el.title = 't=' + fmtT(e.t) + (e.pc ? ' · PC ' + fmtPc(e.pc, true) : '') + '\n' + e.raw;
+  }
+  // 설정전류 0 확인 요청: request/hold 이면 경고, accept 후 PLC 설정이 0 인 동안 '0 적용' 표시
+  function renderSp0(si, tSec, plc) {
+    const el = $('chipSp0'), tx = $('sp0Txt');
+    const e = evAt(sp0Events, si, tSec);
+    let cls = '', txt = '';
+    if (e && e.kind === 'request') {
+      cls = 'plc sp0'; txt = '설정전류 0 확인 요청 · ' + (parseFloat(e.kv.hold) || 0) + '초 보류 중, 마지막 ' + (+e.kv.last || 0).toLocaleString('en-US') + 'A 로 운전';
+    } else if (e && e.kind === 'hold') {
+      cls = 'plc sp0'; txt = '설정전류 0 보류 · PLC 생존 끊김, 마지막 ' + (+e.kv.keep || 0).toLocaleString('en-US') + 'A 유지';
+    } else if (e && e.kind === 'accept' && plc && plc.kv.set === '0') {
+      cls = 'plc sp0 done'; txt = '설정전류 0 적용 (' + (e.kv.by === 'stop' ? '정지' : 'PLC 확인') + ', ' + ((parseFloat(e.kv.held) || 0) / 1000).toFixed(1) + '초 보류 후)';
+    }
+    if (!cls) { el.hidden = true; return; }
+    el.hidden = false; el.className = cls; tx.textContent = txt;
+    el.title = 't=' + fmtT(e.t) + (e.pc ? ' · PC ' + fmtPc(e.pc, true) : '') + '\n' + e.raw;
+  }
+
+  // ---------- [TUN] 측정 필터 / 안정 판정 튜닝 (2026-10-08 추가, CSLab_Rectifier_ADC.c adc_tune_*) ----------
+  //   [TUN] t=.. avg_n=.. ... sw=NSC   현재 값 (부팅 때, TUN? 응답, 변경 후)
+  //   [TUN] set t=.. 이름 / def t=.. / err t=.. 이유
+  // [이름, 설명, 최소, 최대, 단위 간격, 도움말]
+  const TUN = [
+    ['avg_n', '안정 후 제어 입력 평균 개수', 1, 24, 1, '원래 24(보드 AVERAGE_NO). 줄이면 안정 후 응답이 빨라지고 노이즈가 커짐 (표시·PLC·안정 판정은 24개 그대로)'],
+    ['stb_cnt', '안정 판정 연속 주기', 5, 2000, 1, '원래 100. 오차가 한계 안에 이만큼 이어져야 안정 (주기 = ADC 샘플)'],
+    ['stb_err', '안정 오차 한계 [%]', 0.05, 5, 0.05, 'CC 원래 0.5%. 24개 평균 오차로 판정 (CV 1.0% 고정)'],
+    ['stb_res', 'PID 증분 한계 |fResult|', 0.1, 5000, 0.1, '원래 1. 마지막 관문: 원시 샘플로 계산한 PID 증분이 이보다 작아야 안정'],
+    ['bump', '안정 전환 충격 제거', 0, 1, 1, '1이면 안정 전환 순간 미분항 기준을 평균값으로 맞춤 (원래 0)'],
+    ['spk', '스파이크 필터', 0, 1, 1, '1 = 사용'],
+    ['spk_pct', '스파이크 판정 [% 정격]', 0.2, 50, 0.1, '직전 샘플에서 정격의 이만큼 넘게 튀면 대체'],
+    ['spk_n', '대체값 = 직전 몇 개 평균', 1, 4, 1, '3~4 권장'],
+    ['spk_hold', '최대 연속 대체 수', 1, 10, 1, '이보다 길게 벗어나면 실제 변화로 인정 (그만큼 늦게 따라감)'],
+    ['spk_buf', '평균 버퍼에도 대체', 0, 1, 1, '1이면 24개 평균(표시·PLC·안정 후 제어)도 보호']
+  ];
+  const TUN_DEF = { avg_n: 24, stb_cnt: 100, stb_err: 0.5, stb_res: 1, bump: 0, spk: 1, spk_pct: 5, spk_n: 4, spk_hold: 2, spk_buf: 1 };
+  // 2026-10-08 추가: 보드 이동평균 개수 (CSLab_Rectifier_ADC.c AVERAGE_NO, small 24 · backup 12)
+  //   [TUN] avg_max= 로 받음. 예전 펌웨어(avg_max 없음)는 24
+  let AVG_NO = 24;
+  function applyAvgNo(nv) {
+    if (!(nv >= 1) || nv === AVG_NO) return;
+    const old = AVG_NO; AVG_NO = nv;
+    TUN_DEF.avg_n = nv;
+    TUN.forEach(p => { if (p[0] === 'avg_n') p[3] = nv; p[5] = p[5].split(old + '개').join(nv + '개').replace('원래 ' + old + '(', '원래 ' + nv + '('); });
+    try { charts.N.series[2][2] = '3σ ÷ √' + nv; } catch (e) { }   // 차트 준비 전이면 건너뜀 (그래도 범례는 아래 .avgN)
+    document.querySelectorAll('.avgN').forEach(e => { e.textContent = nv; });
+    buildTuneGrid();
+    (sessions.length ? sessions[sessions.length - 1].rows : []).forEach(r => { if (r.aNz != null) r.aNz3 = 3 * r.aNz / Math.sqrt(nv); });
+  }
+  let tunCur = null;          // 보드에서 받은 마지막 값 (숫자), null = 아직 없음
+  let tunEvents = [];         // [{sess, t, kind: 'val'|'set'|'def'|'err', kv, text, raw, pc}]
+  const tunDirty = {};        // 입력 칸을 사람이 고쳤는지
+  function tunVal() { return tunCur || TUN_DEF; }
+  function parseTun(line, now) {
+    const m = line.match(/^\[TUN\]\s+(set|def|err)\s+(.*)$/);
+    const body = m ? m[2] : line.replace(/^\[TUN\]\s*/, '');
+    const o = kv(body);
+    const t = (+o.t || 0) / 1000;
+    const kind = m ? m[1] : 'val';
+    const text = m ? body.replace(/^t=\S+\s*/, '') : '';
+    if (kind === 'val') {
+      const v = {};
+      if (o.avg_max != null) applyAvgNo(+o.avg_max);        // 보드 이동평균 개수 (2026-10-08 추가)
+      TUN.forEach(p => { if (o[p[0]] != null) v[p[0]] = +o[p[0]]; });
+      v.sw = o.sw || '';
+      tunCur = Object.assign({}, TUN_DEF, v);
+    }
+    tunEvents.push({ sess: evSess(t, 'lastTunT'), t: t, kind: kind, kv: o, text: text, raw: line, pc: now });
+    if (tunEvents.length > 2000) tunEvents.shift();
+  }
+  const fmtTunV = (n, v) => v == null ? '–' : (TUN.find(p => p[0] === n)[4] < 1 ? (+v).toFixed(2).replace(/0$/, '') : String(Math.round(v)));
+  function buildTuneGrid() {
+    const g = $('tgrid');
+    g.innerHTML = '<span class="hd">이름</span><span class="hd" style="text-align:right">보드</span><span class="hd">입력</span><span class="hd h4">설명</span>' +
+      TUN.map(p => '<label class="nm" for="tun_' + p[0] + '">' + p[0] + '<small>' + p[1] + '</small></label>' +
+        '<span class="cur" id="tunc_' + p[0] + '">–</span>' +
+        '<input type="number" id="tun_' + p[0] + '" min="' + p[2] + '" max="' + p[3] + '" step="' + p[4] + '">' +
+        '<span class="hint">' + p[5] + ' <span class="num">(' + p[2] + '~' + p[3] + ')</span></span>').join('');
+    TUN.forEach(p => $('tun_' + p[0]).addEventListener('input', () => { tunDirty[p[0]] = true; renderTune(); }));
+  }
+  function setTunInput(n, v) { $('tun_' + n).value = fmtTunV(n, v); }
+  function renderTune() {
+    const cur = tunCur, val = tunVal();
+    TUN.forEach(p => {
+      const n = p[0], inp = $('tun_' + n), c = $('tunc_' + n);
+      c.textContent = cur ? fmtTunV(n, cur[n]) : '–';
+      c.className = 'cur' + (cur && cur[n] !== TUN_DEF[n] ? ' diff' : '');
+      c.title = cur && cur[n] !== TUN_DEF[n] ? '기본값 ' + TUN_DEF[n] + '과 다름' : '';
+      if (!tunDirty[n] && document.activeElement !== inp) setTunInput(n, val[n]);
+      inp.classList.toggle('chg', inp.value !== '' && Math.abs(+inp.value - val[n]) > 1e-9);
+    });
+    const conn = linkUp();
+    ['btnTunRead', 'btnTunApply', 'btnTunDef'].forEach(id => { $(id).disabled = !conn; });
+    let st = conn ? '보드 연결됨 · ' : '보드에 연결하면 값을 읽고 보낼 수 있습니다 (COM1 RxD1 배선 필요) · ';
+    if (cur) {
+      const sw = cur.sw || '';
+      st += '보드 값 수신함' + (sw.length === 3 ? ' · 펌웨어 스위치 노이즈 로그 ' + (sw[0] === '1' ? '켜짐' : '꺼짐') + ', 스파이크 필터 ' + (sw[1] === '1' ? '켜짐' : '꺼짐') + ', TUN 명령 ' + (sw[2] === '1' ? '켜짐' : '꺼짐 (값을 바꿀 수 없음)') : '');
+    } else st += '보드 값을 아직 받지 못함 (표시는 기본값)';
+    $('tunState').textContent = st;
+    renderTunLog();
+    renderSugg();
+  }
+  function renderTunLog() {
+    const si = curSession < 0 ? sessions.length - 1 : curSession;
+    // 변경/기본값 뒤에 따라오는 값 줄은 겹치므로 생략 (부팅 때·TUN? 응답의 값 줄만 표시)
+    const ev = tunEvents.filter((e, i) => e.kind !== 'val' || i === 0 || !['set', 'def'].includes(tunEvents[i - 1].kind)).slice(-60).reverse();
+    const KIND = { val: '값', set: '변경', def: '기본값', err: '거부' };
+    $('tunLog').innerHTML = ev.length ? ev.map(e => {
+      const nx = tunEvents[tunEvents.indexOf(e) + 1];     // 변경 뒤 값 줄 → 새 값
+      const nv = nx && nx.kind === 'val' ? nx.kv[e.text.trim()] : null;
+      let tx = e.kind === 'val' ? TUN.map(p => p[0] + '=' + (e.kv[p[0]] ?? '–')).join(' ') : e.kind === 'set' ? e.text.trim() + (nv != null ? ' = ' + nv : ' 변경됨') : e.kind === 'def' ? '모든 값을 기본값으로' : e.text;
+      return '<li><span class="ts">' + (e.sess === si ? '' : '(다른 부팅) ') + fmtT(e.t) + '</span><span class="tx"><span class="tag' + (e.kind === 'err' ? ' test' : e.kind === 'val' ? '' : ' warm') + '">' + KIND[e.kind] + '</span> ' + esc(tx) + '</span></li>';
+    }).join('') : '<li><span class="ts">–</span><span class="tx">아직 [TUN] 줄이 없습니다.</span></li>';
+  }
+  async function tunSend(pairs) {
+    if (!linkUp()) { note('보드(또는 시뮬레이터)에 연결되어 있지 않습니다. 값을 보내려면 연결 후 다시 누르세요.'); return; }
+    for (const [n, v] of pairs) {
+      await sendCmd('TUN ' + n + '=' + v);
+      tunDirty[n] = false;
+      await new Promise(res => setTimeout(res, 150));
+    }
+    note('TUN 보냄: ' + pairs.map(p => p[0] + '=' + p[1]).join(', ') + '. 보드 응답([TUN] set …)이 튜닝 기록에 나오면 적용된 것입니다.');
+  }
+
+  // ---------- 로그 기반 튜닝 제안 (표시 구간의 CC 운전 줄) ----------
+  const median = (a) => { if (!a.length) return null; const b = a.slice().sort((x, y) => x - y), m = b.length >> 1; return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2; };
+  const quant = (a, q) => { if (!a.length) return null; const b = a.slice().sort((x, y) => x - y); return b[Math.min(b.length - 1, Math.floor(q * (b.length - 1) + 0.5))]; };
+  const ceilTo = (v, st) => Math.ceil(v / st - 1e-9) * st;
+  const nice1 = (v) => { const p = Math.pow(10, Math.floor(Math.log10(v))); return Math.ceil(v / p) * p; };   // 유효숫자 1자리 올림
+  let suggKey = '';
+  function suggest() {
+    const rows = rowsOf(), out = [], tv = tunVal(), RA = ratedA();
+    if (!rows.length) return { out: [['info', '데이터 없음', '보드를 연결하거나 로그를 불러오면 제안이 나옵니다.']], win: '' };
+    const [t0, t1] = viewRange(rows);
+    const vis = rows.filter(r => r.t >= t0 && r.t <= t1);
+    const win = '· 차트 표시 구간 ' + fmtT(t0) + ' ~ ' + fmtT(t1) + ' (' + vis.length + '줄)';
+    if (!vis.some(r => r.aNz != null)) {
+      out.push(['warn', '노이즈 열이 없음', '이 로그에는 amp_nz 등 노이즈 열이 없습니다. 펌웨어 CSLab_Rectifier_Main.h 의 ADC_NOISE_LOG 를 켜고 다시 받아 주세요.']);
+      return { out, win };
+    }
+    const fsA = vis.filter(r => r.fs > 0).map(r => r.fs), fs = median(fsA);   // 2026-10-11: 줄 간격 기준 (LOG n)
+    if (fs) out.push(['info', 'ADC 샘플 ' + fs.toFixed(1) + '회/초 · 제어 주기 ' + (1000 / fs).toFixed(0) + 'ms',
+      AVG_NO + '개 평균 창 ' + (AVG_NO / fs).toFixed(2) + '초 (지연 약 ' + (AVG_NO / 2 / fs).toFixed(2) + '초) · 안정 판정 stb_cnt ' + tv.stb_cnt + '주기 = 최소 ' + (tv.stb_cnt / fs).toFixed(1) + '초' + (tv.avg_n < AVG_NO ? ' · 안정 후 제어 평균 ' + tv.avg_n + '개 = 지연 약 ' + (tv.avg_n / 2 / fs).toFixed(2) + '초' : '')]);
+    const run = vis.filter(r => r.step >= 10 && r.mode === 0 && r.aRef > 0 && r.aNz != null);
+    if (run.length < 10) {
+      out.push(['info', 'CC 운전 구간이 짧음 (' + run.length + '줄)', '운전 중(step ≥ 10, CC, 설정값 > 0) 줄이 10줄 이상이어야 노이즈 판정을 합니다. 차트 표시 구간을 넓혀 보세요.']);
+      return { out, win };
+    }
+    const sig = median(run.map(r => r.aNz)), ref = median(run.map(r => r.aRef));
+    const lim = ref * tv.stb_err / 100, sigAvg = sig / Math.sqrt(AVG_NO);
+    out.push(['info', '원시 노이즈 σ ' + Math.round(sig).toLocaleString() + 'A (정격 ' + (sig / RA * 100).toFixed(2) + '%)',
+      AVG_NO + '개 평균 후 σ ' + sigAvg.toFixed(1) + 'A · 안정 오차 한계 ' + Math.round(lim).toLocaleString() + 'A (설정 ' + Math.round(ref).toLocaleString() + 'A × ' + tv.stb_err + '%) · 원시 1개 샘플로는 3σ = ' + Math.round(3 * sig).toLocaleString() + 'A']);
+    // 1) 안정 오차 한계 vs 평균 노이즈
+    if (3 * sigAvg > lim) {
+      const v = Math.min(5, ceilTo(3 * sigAvg / ref * 100 * 1.2, 0.05));
+      out.push(['warn', '평균 후 노이즈가 안정 오차 한계보다 큼', AVG_NO + '개 평균의 3σ(' + (3 * sigAvg).toFixed(0) + 'A)가 한계 ' + lim.toFixed(0) + 'A를 넘어 오차 판정이 자주 리셋됩니다. stb_err 를 넓히면 안정 판정이 빨라집니다.', ['stb_err', +v.toFixed(2)]]);
+    } else out.push(['good', '안정 오차 한계는 노이즈 대비 여유 ' + (lim / (3 * sigAvg)).toFixed(1) + '배', AVG_NO + '개 평균 노이즈로는 오차 판정이 흔들리지 않습니다.']);
+    // 2) |fResult| 조건이 안정을 막는지
+    // 현재 stb_err·stb_res 로 받은 줄만 (값을 바꾸기 전 줄은 그때 한계로 판정되었으므로 제외)
+    const R = run.filter(r => r.stable === 0 && r.res != null && r.res >= 0 && r.errPct != null && r.stbRes === tv.stb_res && r.stbErr === tv.stb_err && Math.abs(r.errPct) <= r.stbErr);
+    if (R.length >= 6) {
+      const blocked = R.filter(r => r.res >= tv.stb_res), share = blocked.length / R.length;
+      if (share > 0.5) {
+        const v = Math.min(5000, nice1(quant(R.map(r => r.res), 0.6) * 1.2));
+        out.push(['warn', '오차는 한계 안인데 |fResult| 조건 때문에 안정이 안 남 (' + Math.round(share * 100) + '% 창)',
+          '안정 판정 마지막 조건 |fResult| < ' + tv.stb_res + ' 이 원시 샘플 노이즈(미분항)로 거의 만족되지 않습니다. 이 구간 |fResult| 최소의 중앙값 ' + median(R.map(r => r.res)).toFixed(2) + '. stb_res 를 올리거나 스파이크 필터·bump 를 함께 보세요.', ['stb_res', v]]);
+      } else out.push(['good', '|fResult| 조건은 안정을 막지 않음', '오차가 한계 안인 창의 ' + Math.round((1 - share) * 100) + '%에서 |fResult| < ' + tv.stb_res + ' 을 만족했습니다.']);
+    } else out.push(['info', '|fResult| 판정 자료 부족', '현재 설정(stb_err ' + tv.stb_err + ', stb_res ' + tv.stb_res + ')으로 받은 줄 중 안정 전(stable 0)이면서 오차가 한계 안인 창이 ' + R.length + '개뿐입니다 (6개 이상 필요). 설정을 바꾼 뒤라면 운전을 더 받아 보세요. pid_res 열이 −1 이면 PID 구간이 아닙니다.']);
+    // 3) 스파이크
+    const nA = vis.reduce((s, r) => s + (r.spkA || 0), 0), nV = vis.reduce((s, r) => s + (r.spkV || 0), 0), mins = Math.max(1 / 60, (t1 - t0) / 60);
+    const thrA = tv.spk_pct / 100 * RA, sigD = sig * Math.SQRT2;
+    if (!tv.spk) {
+      const big = run.filter(r => r.aMax != null && r.aMin != null && (r.aMax - r.aMin) > Math.max(10 * sig, 0.02 * RA)).length;
+      out.push([big ? 'warn' : 'info', '스파이크 필터 꺼짐' + (big ? ' · 큰 순간 튐 의심 ' + big + '창' : ''),
+        big ? '원시 최소~최대 폭이 노이즈의 10배(또는 정격 2%)를 넘는 창이 있습니다. 필터를 켜면 PID 입력에서 빠집니다.' : '꺼져 있으면 보드가 튄 샘플을 세지 않습니다.', ['spk', 1]]);
+    } else {
+      out.push([nA + nV ? 'warn' : 'good', nA + nV ? '스파이크 대체 전류 ' + nA + ' · 전압 ' + nV + '개 (분당 ' + ((nA + nV) / mins).toFixed(1) + ')' : '스파이크 없음',
+        nA + nV ? '직전 샘플에서 정격 ' + tv.spk_pct + '%(' + Math.round(thrA).toLocaleString() + 'A) 넘게 튄 샘플을 직전 ' + tv.spk_n + '개 평균으로 바꿨습니다. 설정 변경·기동 직후에 몰려 있으면 실제 변화가 ' + tv.spk_hold + '샘플 늦게 반영된 것입니다.' : '표시 구간에서 판정 기준(정격 ' + tv.spk_pct + '%)을 넘은 샘플이 없습니다.']);
+      if (thrA < 8 * sigD) {
+        const v = Math.min(50, Math.max(0.2, ceilTo(8 * sigD / RA * 100, 0.1)));
+        out.push(['warn', '스파이크 기준이 노이즈에 너무 가까움', '연속 샘플 차이의 σ ' + Math.round(sigD) + 'A의 8배보다 기준 ' + Math.round(thrA) + 'A가 작아 정상 샘플을 튐으로 볼 수 있습니다.', ['spk_pct', +v.toFixed(1)]]);
+      } else if (thrA > 40 * sigD && tv.spk_pct > 1) {
+        const v = Math.max(0.2, ceilTo(20 * sigD / RA * 100, 0.1));
+        out.push(['info', '스파이크 기준을 낮출 여유 있음', '기준 ' + Math.round(thrA) + 'A가 연속 샘플 차이 σ ' + Math.round(sigD) + 'A의 40배 이상입니다. 더 작은 튐도 거르려면 낮출 수 있습니다 (20배 기준 제안).', ['spk_pct', +v.toFixed(1)]]);
+      }
+    }
+    // 4) 안정 후 제어 평균 개수 (선택)
+    if (fs && AVG_NO / fs > 1.0) {
+      const nMin = Math.max(4, Math.min(AVG_NO, Math.ceil(Math.pow(3 * sig / Math.max(lim, 1), 2) * 1.5)));
+      if (nMin < tv.avg_n) out.push(['info', '안정 후 응답을 빠르게 할 수 있음 (선택)', AVG_NO + '개 평균 지연이 약 ' + (AVG_NO / 2 / fs).toFixed(2) + '초입니다. 노이즈 기준으로 ' + nMin + '개 평균이면 3σ가 한계 안에 들어옵니다 (지연 약 ' + (nMin / 2 / fs).toFixed(2) + '초). 안정 후 제어 이득이 바뀌는 효과가 있으니 한 단계씩 시험하세요.', ['avg_n', nMin]]);
+    }
+    // 5) 안정까지 걸린 시간
+    const times = [];
+    let st = null, refPrev = null;
+    rows.forEach(r => {
+      const on = r.step >= 10;
+      if (!on) { st = null; refPrev = null; return; }
+      if (st === null || r.aRef !== refPrev) { st = r.t; refPrev = r.aRef; }
+      if (r.stable === 1 && st !== null && st !== -1) { if (r.t >= t0 && r.t <= t1) times.push(r.t - st); st = -1; }
+    });
+    if (times.length) out.push(['info', '운전 시작·설정 변경 후 안정까지 ' + median(times).toFixed(1) + '초 (중앙값, ' + times.length + '회)', '안정(stable 1) 전에는 PID가 원시 샘플을 쓰므로 노이즈가 출력에 그대로 들어갑니다. 이 시간이 길면 위 제안을 순서대로 시험하세요.']);
+    if (tv.bump === 0) out.push(['info', 'bump (선택)', '안정 전환 순간 제어 입력이 원시 샘플에서 평균으로 바뀌며 미분항이 한 번 튑니다. 전환 직후 amp_out 이 흔들리면 bump=1 을 시험하세요.', ['bump', 1]]);
+    return { out, win };
+  }
+  function renderSugg() {
+    const rows = rowsOf(), [t0, t1] = viewRange(rows), tv = tunVal();
+    const key = curSession + ':' + rows.length + ':' + t0 + ':' + t1 + ':' + JSON.stringify(tv) + ':' + ratedA();
+    if (key === suggKey) return;
+    suggKey = key;
+    const { out, win } = suggest();
+    $('sugWin').textContent = win;
+    const icon = { good: '✓', warn: '!', crit: '×', info: 'i' };
+    $('sugg').innerHTML = out.map(x => '<li class="' + x[0] + '"><span class="ic">' + icon[x[0]] + '</span><span><b>' + x[1] + '</b><span class="why">' + x[2] + '</span>' +
+      (x[3] && Math.abs(tv[x[3][0]] - x[3][1]) > 1e-9 ? '<span class="act"><code>TUN ' + x[3][0] + '=' + x[3][1] + '</code><button type="button" data-n="' + x[3][0] + '" data-v="' + x[3][1] + '" data-send="0">입력 칸에 넣기</button><button type="button" data-n="' + x[3][0] + '" data-v="' + x[3][1] + '" data-send="1">바로 적용</button></span>' : '') + '</span></li>').join('');
+  }
+
+  // ---------- [KEY] [RUN] 패널 키 판정 / 운전 시작·정지 원인 (2026-10-08 추가, 펌웨어 DBG_KEYLOG) ----------
+  let keyEvents = [];         // [{sess, t, tag, kv, rest, raw, pc}]
+  const KEY_WHY = {
+    'start': ['warm', '운전 시작'], 'ignored:REMOTE': ['test', '무시 · REMOTE 선택 (패널 RUN 은 LOCAL 에서만)'],
+    'ignored:already_running': ['', '무시 · 이미 운전 중'], 'ignored:emergency': ['test', '무시 · 비상정지 입력 ON'],
+    'ignored:fault': ['test', '무시 · 고장 정지 조건 (외부 고장 입력 또는 PLC 라인비상 비트, backup 판은 알람 포함)'],
+    'stop+error_reset': ['cold', '정지 + 에러 리셋'], 'stop+error_reset(PLC)': ['cold', 'PLC 정지 비트 · 정지 + 에러 리셋'], 'error_reset_only(REMOTE)': ['', '에러 리셋만 (REMOTE 에서는 정지 안 함)']
+  };
+  const RUN_BY = { RUN_key: '패널 RUN 키', PLC_run: 'PLC 시작', fault: '고장', emergency: '비상정지', STOP_key: '패널 STOP 키', PLC_stop: 'PLC 정지 비트', PLC_stop_or_other: 'PLC 정지 비트 등 (운전 판단 밖)', other: '기타' };
+  function parseKey(line, now) {
+    const m = line.match(/^\[(KEY|RUN|EV|ZERO|SPDROP|HUNT|STEP|LOG)\]\s+(.*)$/); if (!m) return;   // 2026-10-11: 현장 로그 이벤트 추가
+    const o = kv(m[2]); if (o.t === undefined) return;   // 시각 없는 줄('LOG?' 응답 등)은 목록에 안 넣음
+    const t = (+o.t || 0) / 1000;
+    keyEvents.push({ sess: evSess(t, 'lastKeyT'), t: t, tag: m[1], kv: o, rest: m[2], raw: line, pc: now });
+    if (keyEvents.length > 3000) keyEvents.shift();
+  }
+  // 2026-10-11 추가: 현장 로그 이벤트 표시
+  const EV_KO = { sel: '선택스위치', user: '모드', run: '운전', emeg: '비상정지', err: '고장', alm: '알람', stable: '안정', vlim: '전압제한', zero: '0 프레임', spd: '설정급락 보류', arm: '재입력 대기', ext: '외부입력' };
+  function keyTextEx(e) {
+    const o = e.kv, w = (e.rest.match(/^(\w+)/) || [])[1] || '';
+    if (e.tag === 'EV') {
+      const ch = (o.chg || '').split(',').filter(Boolean).map(k => EV_KO[k] || k).join(' · ');
+      const pend = o.sel && o.user && o.sel !== o.user ? ' · 전환 보류(스위치 ' + o.sel + ', 운전 ' + o.user + ')' : '';
+      return ['tag' + (o.err === '1' || o.emeg === '1' ? ' cold' : o.alm === '1' || o.zero === '1' ? ' test' : ''), '상태 변화 · ' + ch,
+        '스위치 ' + o.sel + ' · 모드 ' + o.user + ' · 운전 ' + o.run + ' · 비상 ' + o.emeg + ' · 고장 ' + o.err + ' · 알람 ' + o.alm + ' · 안정 ' + o.stable + ' · 전압제한 ' + o.vlim + ' · 0프레임 ' + o.zero + ' · 급락보류 ' + o.spd + ' · 재입력대기 ' + o.arm + ' · ext ' + o.ext + ' · ' + o.amp + 'A / 설정 ' + o.set + pend];
+    }
+    if (e.tag === 'ZERO') return ['tag test', 'PLC 0 프레임 ' + ({ start: '시작', alarm: '1초 지속 → 알람', end: '끝' }[w] || w), w === 'end' ? '지속 ' + o.dur + ' (마지막 정상 설정 유지)' : 'Anybus 가 PLC 데이터를 0 으로 비움 (PROFIBUS 끊김/PLC STOP) · 설정 ' + (o.set || o.keep_set || '?') + ' 유지'];
+    if (e.tag === 'SPDROP') return ['tag' + (w === 'accept' ? ' cold' : ' test'), 'PLC 설정 급락 ' + ({ hold: '보류', glitch: '순간 튐 (무시)', accept: '1초 지속 → 적용' }[w] || w), '새 설정 ' + (o.set || '?') + (o.cur ? ' · 현재 ' + o.cur : '') + (o.held ? ' · 보류 ' + o.held : '')];
+    if (e.tag === 'HUNT') return ['tag test', '헌팅 의심 ' + (w === 'start' ? '시작' : w === 'end' ? '끝' : w), e.rest];
+    if (e.tag === 'STEP') return ['tag', '스텝 시험 ' + w, e.rest];
+    if (e.tag === 'LOG') return ['tag', '로그 주기 ' + (o.period || '?'), e.rest];
+    return null;
+  }
+  function keyText(e) {
+    const ex = keyTextEx(e); if (ex) return ex;
+    if (e.tag === 'RUN') {
+      const st = /\bstart\b/.test(e.rest);
+      return ['tag ' + (st ? 'warm' : 'cold'), st ? '운전 시작' : '운전 정지', '원인 · ' + (RUN_BY[e.kv.by] || e.kv.by || '?')];
+    }
+    if (/\blost\b/.test(e.rest)) return ['tag test', (e.kv.key || '') + ' 키 사라짐', '패널에서 눌렸지만 운전 판단 전에 다른 값(' + (e.kv.now || '?') + ')으로 바뀜 · 조그/다른 입력이 같은 스캔에 덮어씀'];
+    const r = (e.rest.match(/->\s*(\S+)/) || [])[1] || '';
+    const w = KEY_WHY[r] || ['', r];
+    const st = 'user ' + (e.kv.user || '?') + ' · 비상 ' + (e.kv.emeg || '?') + ' · 고장정지 ' + (e.kv.errstop || '?') + ' (TotalError ' + (e.kv.toterr || '?') + ', 라인비상 ' + (e.kv.line || '?') + (e.kv.alarm !== undefined ? ', 알람 ' + e.kv.alarm : '') + ')';   // alarm= : backup(75kA) 판 (기동 조건에 알람 포함)
+    return ['tag' + (w[0] ? ' ' + w[0] : ''), e.kv.key + ' 키 · ' + w[1], st];
+  }
+  function renderKeyLog() {
+    const si = curSession < 0 ? sessions.length - 1 : curSession;
+    const ev = keyEvents.slice(-80).reverse();
+    $('keyLog').innerHTML = ev.length ? ev.map(e => {
+      const k = keyText(e);
+      return '<li><span class="ts">' + (e.sess === si ? '' : '(다른 부팅) ') + fmtT(e.t) + '</span><span class="tx"><span class="' + k[0] + '">' + esc(k[1]) + '</span></span><span class="sub2">' + esc(k[2]) + '</span></li>';
+    }).join('') : '<li><span class="ts">–</span><span class="tx">아직 [KEY] / [RUN] / [EV] 줄이 없습니다 (펌웨어 DBG_KEYLOG, FIELD_LOG).</span></li>';
+  }
+
   function feedLine(raw) {
-    const line = raw.replace(/\r/g, '').trim();
+    let line = raw.replace(/\r/g, '').replace(/^﻿/, '').trim();
     if (!line) return;
+    let now = live ? new Date() : null;
+    // 2026-10-11 추가: '자동 저장'/'원본 저장' 파일 다시 열기 — 줄 앞의 PC 시각 + 탭을 떼고 그 시각을 PC 시각으로 사용
+    //   (전에는 이 형식을 다시 열면 CSV 줄을 하나도 못 읽었음)
+    const ps = line.match(/^(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d)(?:\.(\d{1,3}))?\t(.*)$/) || line.match(/^-\t(.*)$/);
+    if (ps) {
+      if (ps.length > 2) { if (!live) now = new Date(+ps[1], +ps[2] - 1, +ps[3], +ps[4], +ps[5], +ps[6], +(ps[7] || 0)); line = ps[8].trim(); }
+      else line = ps[1].trim();
+      if (!line) return;
+    }
+    if (line.indexOf('[PLCCMD]') === 0) parsePlc(line, now);
+    if (line.indexOf('[SP0]') === 0) parseSp0(line, now);
+    if (line.indexOf('[TUN]') === 0) parseTun(line, now);
+    if (/^\[(KEY|RUN|EV|ZERO|SPDROP|HUNT|STEP|LOG)\]/.test(line)) parseKey(line, now);   // 2026-10-11: 현장 로그 이벤트 추가
+    rawLog.push({ pc: now, line: line });
+    if (rawLog.length > RAW_MAX) rawLog.splice(0, rawLog.length - RAW_MAX);
+    autoAdd(line, now, line.indexOf('[RST]') === 0 || line.indexOf('[SP0]') === 0 || line.indexOf('[TUN]') === 0 || line.indexOf('[RUN]') === 0 || line.indexOf('[KEY]') === 0 || /^\[(EV|ZERO|SPDROP|HUNT)\]/.test(line));
+    if (line.indexOf('[RST]') === 0) parseRst(line);
     const h = line.indexOf('t_ms,');
     if (h >= 0) { setHeader(line.slice(h)); return; }
+    if (!cols) guessHeader(line);              // 2026-10-08 추가: 헤더 없이 연결했으면 칸 개수로 형식 추정
     if (!cols || !/^-?\d/.test(line)) { pushMsg(line); return; }
     const f = line.split(',');
     if (f.length !== cols.length || f.some(x => x.trim() === '' || isNaN(+x))) { pushMsg(line); return; }
@@ -339,9 +1002,23 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
     if (r.t === undefined) { pushMsg(line); return; }
     ['vRef', 'vIn', 'vOut'].forEach(k => { if (r[k] != null) r[k] *= voltScale; });
     r.t /= 1000;
+    // 노이즈 열 파생값: 안정 판정은 AVG_NO(보드 AVERAGE_NO)개 평균으로 하므로 평균 후 노이즈 3σ/√AVG_NO 를 한계와 비교
+    if (r.vNz != null) r.vNz /= 1000;                       // volt_nz[mV] → V
+    const tv = tunVal();
+    r.stbErr = tv.stb_err; r.stbRes = tv.stb_res;            // 이 줄을 받을 때 보드 튜닝 값
+    if (r.aNz != null) r.aNz3 = 3 * r.aNz / Math.sqrt(AVG_NO);
+    if (r.aRef != null && r.mode === 0) r.aLim = r.aRef * r.stbErr / 100;
+    if (r.aAvg != null && r.aRef > 0) r.errPct = (r.aAvg - r.aRef) / r.aRef * 100;
     let s = sessions[sessions.length - 1];
     if (s.rows.length && r.t < s.rows[s.rows.length - 1].t) { sessions.push({ rows: [] }); s = sessions[sessions.length - 1]; }
+    // 2026-10-11 추가: 펌웨어 'LOG n' 으로 CSV 주기가 바뀔 수 있음 -> 앞 줄과의 간격으로 초당 샘플 수 (0.5초 가정 대신)
+    const pv = s.rows.length ? s.rows[s.rows.length - 1] : null;
+    r.dt = pv && r.t > pv.t ? r.t - pv.t : null;
+    if (r.adcN != null) r.fs = (r.dt && r.dt < 5) ? r.adcN / r.dt : r.adcN * 2;
     s.rows.push(r);
+    // 2026-10-11 추가: 하루 로그(0.1초 주기 = 86만 줄)에서 브라우저 메모리 보호. 화면에는 최근 ROW_MAX 줄만,
+    //   전체는 '자동 저장' 파일에 남음 (자동 저장을 켜 두고 기록할 것)
+    if (s.rows.length > ROW_MAX + 20000) { s.rows.splice(0, s.rows.length - ROW_MAX); hoverIdx = -1; pinnedIdx = -1; s.trimmed = true; }
   }
   function feedText(text) {
     const all = partial + text;
@@ -350,23 +1027,30 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
     lines.forEach(feedLine);
   }
   function flushPartial() { if (partial) { feedLine(partial); partial = ''; } }
-  function resetData() { sessions = []; cols = null; partial = ''; otherMsgs = []; hoverIdx = -1; pinnedIdx = -1; curSession = -1; follow = true; }
+  function resetData() { sessions = []; cols = null; colsGuessed = false; partial = ''; otherMsgs = []; resets = []; rawLog = []; plcEvents = []; sp0Events = []; tunEvents = []; keyEvents = []; tunCur = null; hoverIdx = -1; pinnedIdx = -1; curSession = -1; follow = true; }
 
   // ---------- 예시 데이터 (가상) ----------
   function sampleLog() {
-    const L = ['', '', '[DBG] GooSoo rectifier boot, COM1 38400 8N1', '',
-      't_ms,step,mode,stable,adc_amp,amp_ref[A],amp_in[A],amp_out[A],adc_volt,volt_ref[V],volt_in[V],volt_out[V],adc_err,alarm,drop'];
+    const L = ['', '', '[DBG] GooSoo rectifier boot, COM1 115200 8N1',
+      '[RST] cold reset : Power-up (RAM lost) / not warm: reset type (RAM not kept)',
+      '[RST] info boot=1 type=0 rsr=0x00010000 rtc=2026-10-08 09:12:41 warm=0/3 why=reset type (RAM not kept)',
+      '[RST] prev none (RAM lost or not valid)', '[RST] fix dacclr=1 input=1 plcsp0=1 inold=1 dacref=1 hold=1', '[RST] opt rearm=1 faultrearm=1 sp0hold=1 zerosp=1 armwait=0',
+      '[TUN] t=0 avg_n=24 stb_cnt=100 stb_err=0.50 stb_res=1.00 bump=0 spk=1 spk_pct=5.0 spk_n=4 spk_hold=2 spk_buf=1 avg_max=24 sw=111', '',
+      't_ms,step,mode,stable,adc_amp,amp_ref[A],amp_in[A],amp_out[A],adc_volt,volt_ref[V],volt_in[V],volt_out[V],adc_err,alarm,drop,' +
+      'amp_avg[A],amp_min[A],amp_max[A],amp_nz[A],volt_nz[mV],spk_a,spk_v,pid_res,adc_n,soft[%],pid'];
     const RA = 75000, RV = 75, gain = 1.4, R = 55.7 / 70000;   // 플랜트 이득 1.4, 부하 저항(가상)
     let out = 0, stable = 0, cnt = 0, vref = 75.0, aref = 70000, runT = 3.0, soft = 5.0;
     let seed = 7; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed / 2147483647) - 0.5; };
-    for (let k = 1; k <= 200; k++) {
+    for (let k = 1; k <= 240; k++) {
       const t = k * 0.5; let step, aIn, vIn;
+      const stopW = t >= 100 && t < 104;                       // 예시 STOP (100초) → RUN (104초)
+      const runStart = t >= 104 ? 104 : runT;
       if (t === 60) { vref = 50.0; stable = 0; cnt = 0; }
-      if (t < runT) { step = [1, 2, 3, 4, 4, 4][Math.min(5, k - 1)]; out = 0; aIn = 0; }
+      if (t < runT || stopW) { step = stopW ? 1 : [1, 2, 3, 4, 4, 4][Math.min(5, k - 1)]; out = 0; aIn = 0; stable = 0; cnt = 0; }
       else {
         step = (k % 2) ? 10 : 11;
-        const tr = t - runT;
-        if (tr < soft && stable === 0 && t < 60) out = (aref / gain) * (tr / soft) * 0.92;
+        const tr = t - runStart;
+        if (tr < soft && stable === 0 && (t < 60 || t >= 104)) out = (aref / gain) * (tr / soft) * 0.92;
         else {
           aIn = out * gain;
           const vNow = aIn * R;
@@ -378,9 +1062,34 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
         if (Math.abs(aIn - aref) / aref < 0.005) { if (++cnt > 6) stable = 1; } else if (t >= 60) { stable = 0; cnt = 0; }
       }
       vIn = Math.max(0, aIn * R + rnd() * 0.04);
+      // 예시 PLC 명령 (바뀔 때만): 통신 연결 → 설정 70,000A 대기 → RUN → 60초에 설정 변경 없이 유지
+      if (t === 1.0) L.push('[PLCCMD] t=1000 com=0 user=REMOTE start=0 stop=0 dir=0 emeg=0 clear=0 live=ok arm=ok set=0 rev=0 word=0x0000');
+      if (t === 2.0) L.push('[PLCCMD] t=2000 com=1 user=REMOTE start=0 stop=0 dir=0 emeg=0 clear=0 live=ok arm=ok set=70000 rev=0 word=0x0000');
+      if (t === 3.0) L.push('[PLCCMD] t=3000 com=1 user=REMOTE start=1 stop=0 dir=0 emeg=0 clear=0 live=ok arm=ok set=70000 rev=0 word=0x0001');
+      // 예시 설정전류 0 수신 (Anybus 순간 0 데이터 가정): 80초 요청 → 81.5초 원래 값 복귀로 취소, 출력은 계속
+      if (t === 80.0) { L.push('[PLCCMD] t=80000 com=1 user=REMOTE start=0 stop=0 dir=0 emeg=0 clear=0 live=ok arm=ok set=0 rev=0 word=0x0000'); L.push('[SP0] request t=80000 last=70000 hold=10s'); }
+      if (t === 81.5) { L.push('[PLCCMD] t=81500 com=1 user=REMOTE start=1 stop=0 dir=0 emeg=0 clear=0 live=ok arm=ok set=70000 rev=0 word=0x0001'); L.push('[SP0] cancel t=81500 set=70000 held=1500ms'); }
+      if (t === 100.0) L.push('[PLCCMD] t=100000 com=1 user=REMOTE start=0 stop=1 dir=0 emeg=0 clear=0 live=ok arm=wait set=70000 rev=0 word=0x0002');
+      // 예시 키/운전 기록 (가상): PLC 정지 → 고장 입력이 남아 있는 동안 패널 RUN 무시 → 조그 노이즈로 키 사라짐 → PLC 시작
+      if (t === 100.0) L.push('[RUN] t=100000 stop by=PLC_stop_or_other');
+      if (t === 102.0) L.push('[KEY] t=102000 key=RUN user=LOCAL run=0 emeg=0 errstop=1 toterr=1 line=0 -> ignored:fault');
+      if (t === 102.5) L.push('[KEY] t=102500 lost key=RUN now=0x64');
+      if (t === 104.0) L.push('[RUN] t=104000 start by=PLC_run');
+      if (t === 101.0) L.push('[PLCCMD] t=101000 com=1 user=REMOTE start=0 stop=0 dir=0 emeg=0 clear=0 live=ok arm=wait set=70000 rev=0 word=0x0000');
+      if (t === 103.0) L.push('[PLCCMD] t=103000 com=1 user=REMOTE start=0 stop=0 dir=0 emeg=0 clear=0 live=ok arm=ok set=70000 rev=0 word=0x0000');
+      if (t === 104.0) L.push('[PLCCMD] t=104000 com=1 user=REMOTE start=1 stop=0 dir=0 emeg=0 clear=0 live=ok arm=ok set=70000 rev=0 word=0x0001');
       const adcA = Math.round(aIn / (RA * 1.25) * 65536), adcV = Math.round(vIn / (RV * 1.25) * 64356);
+      // 예시 노이즈 열 (가상): 운전 중 σ 약 45A, 40초·95초 스파이크, 안정 전 |fResult| 최소가 한계 1보다 큼 → 70초에 stb_res=20 으로 변경
+      const runN = t >= runT && !stopW, nz = runN ? 42 + Math.abs(rnd()) * 12 : 6 + Math.abs(rnd()) * 2;
+      let aMin = Math.trunc((aIn || 0) - 2.7 * nz), aMax = Math.trunc((aIn || 0) + 2.7 * nz), spA = 0;
+      if (t === 40.0) { spA = 1; aMax += 7200; }
+      if (t === 95.0) { spA = 2; aMin -= 6100; }
+      const res = runN && step >= 10 ? (stable ? 0.4 + Math.abs(rnd()) : (t < 70 ? 3 + Math.abs(rnd()) * 18 : 2 + Math.abs(rnd()) * 10)).toFixed(2) : '-1.00';
+      if (t === 70.0) { L.push('[TUN] set t=70000 stb_res'); L.push('[TUN] t=70000 avg_n=24 stb_cnt=100 stb_err=0.50 stb_res=20.00 bump=0 spk=1 spk_pct=5.0 spk_n=4 spk_hold=2 spk_buf=1 avg_max=24 sw=111'); }
       L.push([Math.round(t * 1000), step, 0, stable, adcA, aref, Math.trunc(aIn), Math.trunc(out), adcV,
-        vref.toFixed(2), vIn.toFixed(2), '0.00', 0, 0, 0].join(','));
+        vref.toFixed(2), vIn.toFixed(2), '0.00', 0, 0, 0,
+        Math.trunc(aIn || 0), Math.max(0, aMin), Math.max(0, aMax), Math.round(nz), Math.round(nz * 0.0008 * 1000 / 1.0), spA, 0, res, 12,
+        runN ? Math.min(100, Math.round((t - runStart) / soft * 100)) : 0, runN && step >= 10 && (aIn > aref * 0.9 || t - runStart >= soft) ? 1 : 0].join(','));
     }
     return L.join('\r\n') + '\r\n';
   }
@@ -403,6 +1112,11 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
     const cc = r.mode === 0, RA = ratedA(), RV = ratedV();
     if (r.err) d.push(['crit', 'ADC 에러 ' + r.err, r.err === 1 ? 'AD7705가 응답하지 않습니다. 측정값(_in)을 믿을 수 없습니다.' : 'ADC 상태머신이 잘못된 단계로 갔습니다.']);
     if (r.alarm) d.push(['crit', '알람 ' + r.alarm + '개 활성', 'LCD 알람 화면에서 항목을 확인하세요. 개수 합이라 어떤 알람인지는 로그로 알 수 없습니다.']);
+    // 2026-10-08 추가: 소프트스타트 진행 / 램프 도중 PID 전환 (DBG_SOFT_LOG)
+    if (r.step >= 10 && r.soft != null && r.soft < 100) {
+      if (r.pid === 1) d.push(['info', '소프트스타트 ' + r.soft + '% 에서 PID 로 넘어감', 'amp_in 이 설정의 90%에 먼저 닿아 램프 도중 PID 로 넘어갔습니다. 펌웨어 CTRL_SOFT_PID_RAMP 가 켜져 있으면 PID 목표도 남은 시동시간 동안 같은 기울기로 올라갑니다 (꺼져 있으면 목표가 바로 설정값 전체).']);
+      else d.push(['info', '소프트스타트 진행 ' + r.soft + '%', '지령(amp_out)을 설정값 × 진행률로 올리는 중입니다 (개루프). 시동시간은 LCD 메뉴 "시동시간" (기본 0.5초).']);
+    }
     if (r.step <= 6) { d.push(['info', '운전 중이 아님 (step ' + r.step + ')', 'RUN 대기 또는 DAC 준비 단계입니다. _out은 0입니다.']); return d; }
     if (r.adcA >= 65000) d.push(['crit', '전류 ADC 포화', 'adc_amp가 최대값 근처입니다. 정격의 125%를 넘었거나 센서 배선을 확인하세요.']);
     if (r.adcV >= 64000) d.push(['crit', '전압 ADC 포화', 'adc_volt가 최대값 근처입니다.']);
@@ -432,8 +1146,16 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
     } else if (outM != null && outM > 0 && (inM == null || inM < 1)) {
       d.push(['crit', '지령은 있는데 측정값이 0', 'DAOUT_EN 릴레이, TB2 배선, 점호기 운전 상태를 확인하세요.']);
     }
+    // 2026-10-08 추가: 노이즈 · 안정 판정 조건 · 스파이크 (노이즈 열이 있을 때)
+    if (cc && r.aNz != null && refM > 0) {
+      const lim = refM * r.stbErr / 100;
+      if (r.aNz3 > lim) d.push(['warn', '평균 후 노이즈가 안정 오차 한계보다 큼', '3σ÷√' + AVG_NO + ' = ' + r.aNz3.toFixed(0) + 'A 가 한계 ' + lim.toFixed(0) + 'A(설정 × ' + r.stbErr + '%)보다 큽니다. 오차 판정이 노이즈로 리셋될 수 있습니다. 아래 튜닝 → 제안을 보세요.']);
+      if (!r.stable && r.errPct != null && Math.abs(r.errPct) <= r.stbErr && r.res != null && r.res >= r.stbRes)
+        d.push(['info', '오차는 한계 안 · |fResult| 조건 대기', AVG_NO + '개 평균 오차 ' + r.errPct.toFixed(2) + '%는 한계 ' + r.stbErr + '% 안인데, 이 창의 |fResult| 최소 ' + r.res.toFixed(2) + '이 한계 ' + r.stbRes + ' 이상이라 안정(stable 1)으로 넘어가지 못합니다. 원시 샘플 노이즈가 PID 미분항으로 들어가는 영향입니다.']);
+    }
+    if ((r.spkA || 0) + (r.spkV || 0)) d.push(['warn', '스파이크 대체 · 전류 ' + r.spkA + ' · 전압 ' + r.spkV + '개', '이 0.5초 창에서 직전 샘플보다 크게 튄 샘플을 직전 평균으로 바꿨습니다' + (r.aMin != null ? ' (원시 최소~최대 ' + fmtA(r.aMin) + ' ~ ' + fmtA(r.aMax) + 'A)' : '') + '. 설정 변경 직후라면 실제 변화가 늦게 반영된 것일 수 있습니다.']);
     if (idx > 0 && rows[idx - 1] && r.drop > rows[idx - 1].drop) d.push(['warn', '디버그 줄 누락', '송신 버퍼가 차서 줄을 버렸습니다. 다른 디버그 출력이 많은지 확인하세요.']);
-    if (idx > 0 && rows[idx - 1]) { const dt = r.t - rows[idx - 1].t; if (dt > 0.75) d.push(['warn', '줄 간격 ' + dt.toFixed(2) + '초', '0.5초보다 깁니다. 메인 루프가 2ms보다 느리게 돌고 있습니다.']); }
+    if (idx > 0 && rows[idx - 1]) { const dt = r.t - rows[idx - 1].t, nom = (idx > 1 && rows[idx - 1].dt) ? rows[idx - 1].dt : 0.5; if (dt > nom * 1.5) d.push(['warn', '줄 간격 ' + dt.toFixed(2) + '초', '앞 간격(' + nom.toFixed(2) + '초)보다 깁니다. 메인 루프가 2ms보다 느리게 돌았거나 줄이 빠졌습니다 (LOG 주기를 바꾼 직후면 정상).']); }
     return d;
   }
   function setChip(el, cls, txt) { el.className = 'chip ' + (cls || ''); el.innerHTML = '<span class="dot"></span>' + txt; }
@@ -448,6 +1170,7 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
     const idx = pinnedIdx >= 0 ? pinnedIdx : (hoverIdx >= 0 ? hoverIdx : rows.length - 1);
     const r = rows[idx];
     $('chipSrc').hidden = !isSample;
+    renderPlc(rows, idx);
     if (!r) {
       ['aRef', 'aIn', 'aOut', 'vRef', 'vIn', 'vOut'].forEach(k => setVal(k, null));
       setChip($('chipMode'), '', '데이터 없음'); setChip($('chipStable'), '', '–'); setChip($('chipAlarm'), '', '–');
@@ -475,6 +1198,12 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
     $('when').textContent = (pinnedIdx >= 0 ? '고정 · ' : (hoverIdx >= 0 ? '' : '최신 · ')) + fmtT(r.t) + ' (t_ms ' + Math.round(r.t * 1000) + ')';
     $('mStep').textContent = r.step; $('mStepTxt').textContent = stepText(r.step);
     $('mAdcA').textContent = r.adcA; $('mAdcV').textContent = r.adcV; $('mDrop').textContent = r.drop;
+    $('mFs').textContent = r.fs ? r.fs.toFixed(1) + '회/초' : '–';
+    $('mNz').textContent = r.aNz != null ? Math.round(r.aNz).toLocaleString() + 'A' + (r.vNz != null ? ' · ' + (r.vNz * 1000).toFixed(0) + 'mV' : '') : '–';
+    $('mSpk').textContent = r.spkA != null ? r.spkA + ' · ' + r.spkV : '–';
+    $('mRes').textContent = r.res == null ? '–' : r.res < 0 ? 'PID 아님' : r.res.toFixed(2) + ' / ' + r.stbRes;
+    $('mSoft').textContent = r.soft == null ? '–' : r.soft + '%' + (r.pid === 1 ? ' · PID' : r.step >= 10 ? ' · 램프' : '');
+    if (r.step <= 6 && r.aRef != null) $('aRefP').textContent = '정지 중 · 멈추기 전 마지막 기준값';
     const d = diagnose(r, rows, idx);
     const icon = { good: '✓', warn: '!', crit: '×', info: 'i' };
     $('diag').innerHTML = d.length ? d.map(x => '<li class="' + x[0] + '"><span class="ic">' + icon[x[0]] + '</span><span><b>' + x[1] + '</b><span class="why">' + x[2] + '</span></span></li>').join('')
@@ -486,8 +1215,11 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
   const charts = {
     A: { cv: $('cA'), box: $('boxA'), series: [['aRef', '--s-ref', 'amp_ref'], ['aIn', '--s-in', 'amp_in'], ['aOut', '--s-out', 'amp_out', 0]], fmt: (v) => Math.round(v).toLocaleString('en-US'), unit: 'A' },
     V: { cv: $('cV'), box: $('boxV'), series: [['vRef', '--s-ref', 'volt_ref'], ['vIn', '--s-in', 'volt_in'], ['vOut', '--s-out', 'volt_out', 1]], fmt: (v) => v.toFixed(2), unit: 'V' },
+    // 2026-10-08 추가: 노이즈 (펌웨어 ADC_NOISE_LOG 열). [키, 색, 이름, 모드 제한, 굵기]
+    N: { cv: $('cN'), box: $('boxN'), series: [['aLim', '--crit', '안정 오차 한계', 0, 1.5], ['aNz', '--s-nz', 'amp_nz σ'], ['aNz3', '--s-nz2', '3σ ÷ √24']], fmt: (v) => v >= 100 ? Math.round(v).toLocaleString('en-US') : v.toFixed(1), unit: 'A', noise: true },
     S: { cv: $('cS'), box: $('boxS'), status: true }
   };
+  const tunMarks = () => { const si = curSession < 0 ? sessions.length - 1 : curSession; return tunEvents.filter(e => e.sess === si && (e.kind === 'set' || e.kind === 'def')); };
   const PAD = { l: 64, r: 14, t: 10, b: 24 };
   function niceTicks(lo, hi, n) {
     if (hi - lo < 1e-9) { hi = lo + 1; }
@@ -518,6 +1250,11 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
       empty.textContent = key === 'A' ? '수신된 데이터 줄이 없습니다. 보드를 연결하거나 로그를 불러오세요.' : '';
       return;
     }
+    if (key === 'N' && !rows.some(r => r.aNz != null)) {
+      if (!empty) { empty = document.createElement('div'); empty.className = 'empty'; c.box.appendChild(empty); }
+      empty.textContent = '이 로그에는 노이즈 열(amp_nz 등)이 없습니다. 펌웨어 ADC_NOISE_LOG 스위치를 확인하세요.';
+      c.X = null; return;
+    }
     if (empty) empty.remove();
     const [t0, t1] = viewRange(rows);
     const vis = rows.filter(r => r.t >= t0 && r.t <= t1);
@@ -528,7 +1265,15 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
     // x 눈금
     const xt = niceTicks(t0, t1, Math.max(2, Math.floor((w - PAD.l) / 90)));
     if (c.status) {
-      const lanes = [['운전', r => r.step >= 10, '--s-in'], ['안정', r => r.stable === 1 && r.step >= 10, '--good'], ['알람', r => (r.alarm || r.err), '--crit']];
+      const lanes = [['운전', r => r.step >= 10, '--s-in'], ['안정', r => r.stable === 1 && r.step >= 10, '--good'],
+        // 2026-10-08 추가: 안정 판정 두 조건과 스파이크 (노이즈 열이 있을 때)
+        ['오차 OK', r => r.step >= 10 && r.mode === 0 && r.errPct != null && Math.abs(r.errPct) <= r.stbErr, '--good'],
+        ['증분 OK', r => r.step >= 10 && r.res != null && r.res >= 0 && r.res < r.stbRes, '--good'],
+        ['스파이크', r => (r.spkA || 0) + (r.spkV || 0) > 0, '--warn'],
+        // 2026-10-08 추가: 소프트스타트 램프 진행 중 / PID 구간 (펌웨어 DBG_SOFT_LOG)
+        ['램프', r => r.step >= 10 && r.soft != null && r.soft < 100, '--s-out'],
+        ['PID', r => r.step >= 10 && r.pid === 1, '--s-nz'],
+        ['알람', r => (r.alarm || r.err), '--crit']];
       const lh = (h - PAD.b - 4) / lanes.length;
       lanes.forEach((ln, i) => {
         const y = 2 + i * lh;
@@ -546,6 +1291,8 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
     } else {
       let lo = Infinity, hi = -Infinity;
       vis.forEach(r => c.series.forEach(s => { const v = r[s[0]]; if (v == null) return; if (s[3] !== undefined && r.mode !== s[3]) return; lo = Math.min(lo, v); hi = Math.max(hi, v); }));
+      const band = key === 'A' && vis.some(r => r.aMin != null);
+      if (band) vis.forEach(r => { if (r.aMin != null && r.step >= 10) { lo = Math.min(lo, r.aMin); hi = Math.max(hi, r.aMax); } });
       if (!isFinite(lo)) { lo = 0; hi = 1; }
       lo = Math.min(0, lo);
       const yt = niceTicks(lo, hi * 1.04, 4), y0 = yt[0], y1 = yt[yt.length - 1];
@@ -554,8 +1301,27 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
       g.strokeStyle = grid; g.lineWidth = 1; g.fillStyle = fg2; g.textAlign = 'right'; g.textBaseline = 'middle';
       yt.forEach(v => { const y = Math.round(Y(v)) + .5; g.beginPath(); g.moveTo(PAD.l, y); g.lineTo(w - PAD.r, y); g.stroke(); g.fillText(c.fmt(v).replace(/\.00$/, ''), PAD.l - 8, y); });
       g.save(); g.beginPath(); g.rect(PAD.l, PAD.t - 2, w - PAD.l - PAD.r, h - PAD.t - PAD.b + 4); g.clip();
+      // 원시 샘플 최소~최대 띠 (전류, 필터 전) : 끊긴 구간마다 다각형
+      if (band) {
+        g.fillStyle = css('--s-band');
+        let seg = [];
+        const flush = () => {
+          if (seg.length > 1) { g.beginPath(); seg.forEach((r, i) => { const x = X(r.t), y = Y(r.aMax); if (i) g.lineTo(x, y); else g.moveTo(x, y); }); for (let i = seg.length - 1; i >= 0; i--) g.lineTo(X(seg[i].t), Y(seg[i].aMin)); g.closePath(); g.fill(); }
+          seg = [];
+        };
+        vis.forEach(r => { if (r.aMin != null && r.step >= 10) seg.push(r); else flush(); });
+        flush();
+      }
+      // 튜닝 변경 시점 (보드 t 기준)
+      if (key === 'A' || key === 'N') {
+        g.strokeStyle = css('--s-tun'); g.lineWidth = 1.5; g.setLineDash([4, 3]);
+        tunMarks().forEach(e => { if (e.t < t0 || e.t > t1) return; const x = Math.round(X(e.t)) + .5; g.beginPath(); g.moveTo(x, PAD.t - 2); g.lineTo(x, h - PAD.b); g.stroke(); });
+        g.setLineDash([]);
+      }
       c.series.forEach(s => {
-        g.strokeStyle = css(s[1]); g.lineWidth = 2; g.lineJoin = 'round';
+        g.strokeStyle = css(s[1]); g.lineWidth = s[4] || 2; g.lineJoin = 'round';
+        if (s[0] === 'aRef' || s[0] === 'vRef') { drawRefLine(g, s[0], vis, X, Y); return; }
+        if (s[0] === 'aLim') g.setLineDash([6, 4]); else g.setLineDash([]);
         g.beginPath(); let on = false;
         for (let k = 0; k < vis.length; k++) {
           const r = vis[k], v = r[s[0]];
@@ -567,6 +1333,12 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
         }
         g.stroke();
       });
+      g.setLineDash([]);
+      // 스파이크 대체가 있었던 창 : 아래쪽 점
+      if (c.noise) {
+        g.fillStyle = css('--warn');
+        vis.forEach(r => { const n = (r.spkA || 0) + (r.spkV || 0); if (!n) return; g.beginPath(); g.arc(X(r.t), h - PAD.b - 6, Math.min(6, 2.5 + n), 0, 7); g.fill(); });
+      }
       g.restore();
     }
     // x 축
@@ -586,6 +1358,29 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
       });
     }
   }
+  // 기준선 (계단). 2026-10-08 추가: 정지 중(step < 10)은 흐린 점선 = 펌웨어가 멈추기 전 마지막 기준값을 그대로 찍는 구간
+  //   fRefAmp 는 CC 제어 단계(SystemRun 일 때만)에서만 갱신되므로 STOP 뒤에는 값이 남아 있음 (설정값은 지워지지 않음)
+  function drawRefLine(g, key, vis, X, Y) {
+    let seg = [], stopped = null;
+    const flush = () => {
+      if (seg.length) {
+        g.save();
+        if (stopped) { g.globalAlpha = 0.35; g.setLineDash([3, 4]); g.lineWidth = 1.5; } else g.setLineDash([]);
+        g.beginPath();
+        seg.forEach((p, i) => { if (i) { g.lineTo(p[0], seg[i - 1][1]); g.lineTo(p[0], p[1]); } else g.moveTo(p[0], p[1]); });
+        g.stroke(); g.restore();
+      }
+      seg = [];
+    };
+    vis.forEach(r => {
+      const v = r[key];
+      if (v == null) { flush(); stopped = null; return; }
+      const st = r.step < 10, p = [X(r.t), Y(v)];
+      if (stopped !== null && st !== stopped) { const last = seg[seg.length - 1]; flush(); if (last) seg.push(last); }   // 경계는 이어서
+      stopped = st; seg.push(p);
+    });
+    flush();
+  }
   function drawTips() {
     const rows = rowsOf(), idx = pinnedIdx >= 0 ? pinnedIdx : hoverIdx, r = rows[idx];
     Object.keys(charts).forEach(k => {
@@ -596,8 +1391,24 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
       c.series.forEach(s => {
         const v = r[s[0]]; if (v == null) return;
         const na = s[3] !== undefined && r.mode !== s[3];
-        html += '<div class="r"><span><span class="key ' + (s[0].endsWith('Ref') ? 'ref' : s[0].endsWith('In') ? 'in' : 'out') + '"></span>' + s[2] + '</span><span>' + (na ? '갱신 안 됨' : c.fmt(v) + ' ' + c.unit) + '</span></div>';
+        const kc = c.noise ? '" style="background:var(' + s[1] + ')' : (s[0].endsWith('Ref') ? 'ref' : s[0].endsWith('In') ? 'in' : 'out');
+        html += '<div class="r"><span><span class="key ' + kc + '"></span>' + s[2] + '</span><span>' + (na ? '갱신 안 됨' : c.fmt(v) + ' ' + c.unit + (c.noise && r.aRef > 0 ? ' (' + (v / r.aRef * 100).toFixed(2) + '%)' : '')) + '</span></div>';
       });
+      // 2026-10-08 추가: 원시 최소~최대, 스파이크, |fResult|
+      if (k === 'A' && r.aMin != null) html += '<div class="r"><span><span class="key band"></span>원시 최소~최대</span><span>' + c.fmt(r.aMin) + ' ~ ' + c.fmt(r.aMax) + ' A</span></div>';
+      // 2026-10-11 추가: 현장 로그 열 (FIELD_LOG)
+      if (k === 'A' && r.user != null) {
+        html += '<div class="r"><span>제어 측정 · 변화량</span><span>' + c.fmt(r.ctlA) + ' A · ' + (r.fRes == null ? '–' : r.fRes.toFixed(1)) + '</span></div>';
+        html += '<div class="r"><span>모드 · 스위치</span><span>' + (r.user ? 'REMOTE' : 'LOCAL') + ' · ' + (r.sel ? 'REMOTE' : 'LOCAL') + (r.user !== r.sel ? ' (전환 보류)' : '') + '</span></div>';
+        html += '<div class="r"><span>PLC 설정 · 워드</span><span>' + c.fmt(r.plcSp) + ' A · 0x' + (r.plcW >>> 0).toString(16).toUpperCase().padStart(4, '0') + (r.com ? '' : ' (통신 끊김)') + '</span></div>';
+        if (r.vlim) html += '<div class="r"><span>전압 제한</span><span>동작 중</span></div>';
+      }
+      if (c.noise) {
+        if (r.vNz != null) html += '<div class="r"><span>volt_nz σ</span><span>' + (r.vNz * 1000).toFixed(0) + ' mV</span></div>';
+        html += '<div class="r"><span>스파이크 전류·전압</span><span>' + (r.spkA ?? '–') + ' · ' + (r.spkV ?? '–') + '</span></div>';
+        html += '<div class="r"><span>|fResult| 최소 / 한계</span><span>' + (r.res == null ? '–' : r.res < 0 ? 'PID 아님' : r.res.toFixed(2)) + ' / ' + r.stbRes + '</span></div>';
+        if (r.fs) html += '<div class="r"><span>ADC 샘플</span><span>' + r.fs.toFixed(1) + ' 회/초</span></div>';
+      }
       tip.innerHTML = html;
       const x = c.X(r.t), bw = c.box.clientWidth, tw = tip.offsetWidth;
       tip.style.left = (x + 14 + tw > bw ? x - 14 - tw : x + 14) + 'px';
@@ -609,7 +1420,14 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
   const TCOLS = [['t', 't', r => fmtT(r.t)], ['step', 'step'], ['mode', 'mode', r => r.mode === 0 ? 'CC' : 'CV'], ['stable', 'stable'],
     ['adc_amp', 'adcA'], ['amp_ref', 'aRef', r => fmtA(r.aRef) ?? '–'], ['amp_in', 'aIn', r => fmtA(r.aIn)], ['amp_out', 'aOut', r => fmtA(r.aOut)],
     ['adc_volt', 'adcV'], ['volt_ref', 'vRef', r => fmtV(r.vRef)], ['volt_in', 'vIn', r => fmtV(r.vIn)], ['volt_out', 'vOut', r => r.vOut == null ? '–' : fmtV(r.vOut)],
-    ['adc_err', 'err'], ['alarm', 'alarm'], ['drop', 'drop']];
+    ['adc_err', 'err'], ['alarm', 'alarm'], ['drop', 'drop'],
+    ['amp_nz', 'aNz', r => r.aNz == null ? '–' : Math.round(r.aNz)], ['spk', 'spkA', r => r.spkA == null ? '–' : r.spkA + '/' + r.spkV],
+    ['pid_res', 'res', r => r.res == null ? '–' : r.res < 0 ? '–' : r.res.toFixed(2)], ['adc_n', 'adcN', r => r.adcN ?? '–'],
+    ['soft', 'soft', r => r.soft ?? '–'], ['pid', 'pid', r => r.pid ?? '–'],
+    // 2026-10-11 추가: 현장 로그 열 (FIELD_LOG)
+    ['ctl_a', 'ctlA', r => r.ctlA == null ? '–' : fmtA(r.ctlA)], ['res', 'fRes', r => r.fRes == null ? '–' : r.fRes.toFixed(1)],
+    ['user/sel', 'user', r => r.user == null ? '–' : (r.user ? 'R' : 'L') + '/' + (r.sel ? 'R' : 'L')], ['run', 'run', r => r.run ?? '–'],
+    ['plc_sp', 'plcSp', r => r.plcSp == null ? '–' : fmtA(r.plcSp)], ['com', 'com', r => r.com ?? '–'], ['vlim', 'vlim', r => r.vlim ?? '–']];
   let tableRenderedFor = null;
   function renderTable(force) {
     const rows = rowsOf();
@@ -636,12 +1454,12 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
   let raf = 0;
   function redraw(tableToo) {
     if (raf) return;
-    raf = requestAnimationFrame(() => { raf = 0; drawChart('A'); drawChart('V'); drawChart('S'); drawTips(); renderReadout(); if (tableToo) renderTable(); });
+    raf = requestAnimationFrame(() => { raf = 0; drawChart('A'); drawChart('V'); drawChart('N'); drawChart('S'); drawTips(); renderReadout(); renderRst(); renderKeyLog(); renderTune(); if (tableToo) renderTable(); });
   }
   function fullRefresh() { redraw(true); $('msgs').textContent = otherMsgs.length ? otherMsgs.join('\n') : '없음'; }
 
   // ---------- 상호작용 ----------
-  ['A', 'V', 'S'].forEach(k => {
+  ['A', 'V', 'N', 'S'].forEach(k => {
     const c = charts[k];
     function pick(ev) {
       const rows = rowsOf(); if (!rows.length || !c.X) return -1;
@@ -669,7 +1487,7 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
   $('baud').addEventListener('change', () => store.set('dcs.baud', $('baud').value));
 
   function loadText(text, sample) {
-    resetData(); isSample = !!sample;
+    resetData(); isSample = !!sample; live = false;
     feedText(text); flushPartial();
     fullRefresh();
   }
@@ -683,9 +1501,12 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
   ['dragleave', 'drop'].forEach(n => drop.addEventListener(n, e => { e.preventDefault(); drop.classList.remove('over'); }));
   drop.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) readFile(f); });
   $('btnCopy').addEventListener('click', () => {
-    const rows = rowsOf();
-    const txt = 't_ms,step,mode,stable,adc_amp,amp_ref[A],amp_in[A],amp_out[A],adc_volt,volt_ref[V],volt_in[V],volt_out[V],adc_err,alarm,drop\n' +
-      rows.map(r => [Math.round(r.t * 1000), r.step, r.mode, r.stable, r.adcA, r.aRef ?? '', r.aIn, r.aOut, r.adcV, fmtV(r.vRef), fmtV(r.vIn), r.vOut == null ? '' : fmtV(r.vOut), r.err, r.alarm, r.drop].join(',')).join('\n');
+    const rows = rowsOf(), hasNz = rows.some(r => r.aNz != null), hasSoft = rows.some(r => r.soft != null), hasFld = rows.some(r => r.user != null);
+    const txt = 't_ms,step,mode,stable,adc_amp,amp_ref[A],amp_in[A],amp_out[A],adc_volt,volt_ref[V],volt_in[V],volt_out[V],adc_err,alarm,drop' +
+      (hasNz ? ',amp_avg[A],amp_min[A],amp_max[A],amp_nz[A],volt_nz[mV],spk_a,spk_v,pid_res,adc_n' : '') + (hasSoft ? ',soft[%],pid' : '') + (hasFld ? HDR_FIELD : '') + '\n' +
+      rows.map(r => [Math.round(r.t * 1000), r.step, r.mode, r.stable, r.adcA, r.aRef ?? '', r.aIn, r.aOut, r.adcV, fmtV(r.vRef), fmtV(r.vIn), r.vOut == null ? '' : fmtV(r.vOut), r.err, r.alarm, r.drop]
+        .concat(hasNz ? [r.aAvg ?? '', r.aMin ?? '', r.aMax ?? '', r.aNz ?? '', r.vNz == null ? '' : Math.round(r.vNz * 1000), r.spkA ?? '', r.spkV ?? '', r.res == null ? '' : r.res.toFixed(2), r.adcN ?? ''] : []).concat(hasSoft ? [r.soft ?? '', r.pid ?? ''] : [])
+        .concat(hasFld ? [r.ctlA, r.fRes, r.user, r.sel, r.run, r.plcW, r.plcSp, r.plcLive, r.com, r.vlim, r.totErr, r.ext].map(v => v ?? '') : []).join(',')).join('\n');
     const b = $('btnCopy');
     const done = (ok) => { b.textContent = ok ? '복사됨' : '복사 실패'; setTimeout(() => b.textContent = 'CSV 복사', 1500); };
     try { navigator.clipboard.writeText(txt).then(() => done(true), () => { $('paste').value = txt; $('pasteBox').open = true; $('paste').select(); done(false); }); }
@@ -694,6 +1515,7 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
 
   // ---------- Web Serial ----------
   let port = null, reader = null, keepReading = false;
+  let simSrc = null, simBase = '';              // PC 시뮬레이터 연결 (아래 simConnect)
   function note(html) { const n = $('serialNote'); n.innerHTML = html; n.hidden = !html; }
   const LOCAL_HINT = '이 페이지 안에서는 브라우저가 시리얼 포트 접근을 막습니다. <b>C:\\workgroup_backup\\tools\\dcs_uart_viewer.html</b> 파일을 Chrome이나 Edge로 직접 열면 COM 포트에 바로 연결됩니다. 지금은 MobaXterm 로그를 저장해 <b>로그 파일 열기</b>로 불러올 수 있습니다.';
   $('btnConnect').addEventListener('click', async () => {
@@ -707,9 +1529,12 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
       note('포트를 열지 못했습니다: ' + (e && e.message ? e.message : e) + '. MobaXterm 등 다른 프로그램이 같은 COM 포트를 쓰고 있으면 먼저 닫아 주세요.');
       port = null; return;
     }
-    resetData(); isSample = false; fullRefresh();
+    resetData(); isSample = false; live = true; fullRefresh();
     note('연결됨 · ' + $('baud').value + ' 8N1. 보드를 리셋하면 헤더 줄부터 받습니다. 헤더를 놓쳤다면 리셋해 주세요.');
     $('btnConnect').hidden = true; $('btnDisconnect').hidden = false;
+    $('btnRstQ').hidden = false; $('btnWdt').hidden = false;
+    setTimeout(() => sendCmd('PLC?'), 300);   // 현재 PLC 명령 상태 요청 (바뀔 때만 오므로, RxD1 배선이 없으면 다음 변경 때 표시)
+    setTimeout(() => sendCmd('TUN?'), 700);   // 현재 튜닝 값 요청 (부팅 때도 [TUN] 줄이 나옴)
     keepReading = true;
     const dec = new TextDecoder('latin1');
     let pend = 0;
@@ -720,18 +1545,134 @@ textarea { width: 100%; min-height: 110px; font-family: var(--f-num); font-size:
           const { value, done } = await reader.read();
           if (done) break;
           feedText(dec.decode(value, { stream: true }));
-          if (!pend) pend = setTimeout(() => { pend = 0; if (!cols) note('수신 중이지만 아직 헤더(t_ms,…)를 못 받았습니다. 보드를 리셋하면 헤더부터 나옵니다.'); else note(''); fullRefresh(); }, 200);
+          if (!pend) pend = setTimeout(() => { pend = 0; if (!cols) note('수신 중이지만 아직 헤더(t_ms,…)를 못 받았고 칸 개수로도 형식을 알 수 없습니다. 펌웨어가 20초마다 헤더를 다시 보내면 그때부터 그립니다 (이전 펌웨어면 보드 리셋).'); else if (!colsGuessed) note(''); fullRefresh(); }, 200);
         }
       } catch (e) { note('수신 오류: ' + (e && e.message ? e.message : e)); }
       finally { reader.releaseLock(); }
     }
   });
+  // ---------- PC 시뮬레이터 연결 (2026-10-08 추가, Documents\lotte_dcs : lotte_dcs.exe <시나리오> web) ----------
+  //   시뮬레이터가 http://localhost:8765 에서 펌웨어 UART 줄을 Server-Sent Events(/events)로 보냄.
+  //   연결하면 그 실행의 처음 줄부터 다시 받고 이후 실시간. 명령(TUN?, PLC? …)은 POST /cmd → 펌웨어 COM1 수신
+  function linkUp() { return !!(port && port.writable) || !!simSrc; }
+  function simConnect(base) {
+    if (simSrc || port) return;
+    simBase = base.replace(/\/+$/, '');
+    resetData(); isSample = false; live = true; fullRefresh();
+    note('시뮬레이터에 연결하는 중 · ' + esc(simBase));
+    simSrc = new EventSource(simBase + '/events');
+    let pend = 0, opened = 0;
+    simSrc.onopen = () => {
+      if (opened++) { resetData(); fullRefresh(); }          // 다시 연결되면 처음부터 다시 받으므로 비움
+      note('시뮬레이터 연결됨 · ' + esc(simBase) + ' · 그 실행의 처음 줄부터 받은 뒤 실시간으로 이어짐');
+      setTimeout(() => sendCmd('PLC?'), 300);
+      setTimeout(() => sendCmd('TUN?'), 700);
+    };
+    simSrc.onmessage = (e) => { feedLine(e.data); if (!pend) pend = setTimeout(() => { pend = 0; fullRefresh(); }, 200); };
+    simSrc.onerror = () => note('시뮬레이터와 연결이 끊겼습니다. 자동으로 다시 시도합니다 · lotte_dcs.exe 를 <b>web</b> 인수로 실행 중인지 확인하세요 (예: lotte_dcs.exe 0 web).');
+    $('btnConnect').hidden = true; $('btnSim').hidden = true; $('btnDisconnect').hidden = false; $('btnRstQ').hidden = false;
+  }
+  $('btnSim').addEventListener('click', () => {
+    let def = /^https?:/.test(location.protocol) ? location.origin : 'http://localhost:8765';
+    try { def = localStorage.getItem('dcsSimUrl') || def; } catch (e) {}
+    const u = prompt('시뮬레이터 주소 (lotte_dcs.exe 0 web 을 먼저 실행)', def);
+    if (!u) return;
+    try { localStorage.setItem('dcsSimUrl', u); } catch (e) {}
+    simConnect(u);
+  });
+  if (/[?&]sim\b/.test(location.search) && /^https?:/.test(location.protocol)) setTimeout(() => simConnect(location.origin), 0);   // 시뮬레이터가 연 주소면 자동 연결
+
   $('btnDisconnect').addEventListener('click', async () => {
+    if (simSrc) {
+      simSrc.close(); simSrc = null; live = false; fullRefresh();
+      $('btnConnect').hidden = false; $('btnSim').hidden = false; $('btnDisconnect').hidden = true; $('btnRstQ').hidden = true;
+      note('시뮬레이터 연결을 끊었습니다.');
+      return;
+    }
     keepReading = false;
     try { if (reader) await reader.cancel(); } catch (e) {}
     try { if (port) await port.close(); } catch (e) {}
-    port = null; flushPartial(); fullRefresh();
-    $('btnConnect').hidden = false; $('btnDisconnect').hidden = true; note('연결을 끊었습니다.');
+    port = null; live = false; flushPartial(); fullRefresh();
+    $('btnConnect').hidden = false; $('btnSim').hidden = false; $('btnDisconnect').hidden = true; note('연결을 끊었습니다.');
+    $('btnRstQ').hidden = true; $('btnWdt').hidden = true;
+  });
+
+  // 시험용 명령 송신 (보드 RST_TEST_CMD, COM1 RxD1 PA5 배선 필요)
+  async function sendCmd(cmd) {
+    if (simSrc) {                                            // 시뮬레이터: HTTP 로 보냄 → 펌웨어 COM1 RxD
+      try { await fetch(simBase + '/cmd', { method: 'POST', body: cmd }); }
+      catch (e) { note('시뮬레이터로 명령을 보내지 못했습니다: ' + esc(String(e && e.message ? e.message : e))); }
+      return;
+    }
+    if (!port || !port.writable) { note('보드에 연결되어 있지 않습니다.'); return; }
+    const w = port.writable.getWriter();
+    try { await w.write(new TextEncoder().encode(cmd + '\r\n')); }
+    catch (e) { note('송신 오류: ' + (e && e.message ? e.message : e)); }
+    finally { w.releaseLock(); }
+  }
+  $('btnRstQ').addEventListener('click', () => sendCmd('RST?'));
+
+  // 튜닝 (2026-10-08 추가)
+  buildTuneGrid();
+  $('btnTunRead').addEventListener('click', () => sendCmd('TUN?'));
+  $('btnTunReset').addEventListener('click', () => { const v = tunVal(); TUN.forEach(p => { tunDirty[p[0]] = false; setTunInput(p[0], v[p[0]]); }); renderTune(); });
+  $('btnTunDef').addEventListener('click', () => {
+    if (!confirm('보드에 TUN DEF 를 보내 모든 튜닝 값을 기본값(원래 동작)으로 돌립니다. 계속할까요?')) return;
+    TUN.forEach(p => { tunDirty[p[0]] = false; });
+    sendCmd('TUN DEF');
+  });
+  $('btnTunApply').addEventListener('click', () => {
+    const val = tunVal(), pairs = [], bad = [];
+    TUN.forEach(p => {
+      const inp = $('tun_' + p[0]);
+      if (inp.value === '') return;
+      const v = +inp.value;
+      if (Math.abs(v - val[p[0]]) < 1e-9) return;
+      if (!(v >= p[2] && v <= p[3])) { bad.push(p[0] + ' (' + p[2] + '~' + p[3] + ')'); return; }
+      pairs.push([p[0], p[4] < 1 ? +v.toFixed(2) : Math.round(v)]);
+    });
+    if (bad.length) { note('범위를 벗어난 값이 있어 보내지 않았습니다: ' + bad.join(', ')); return; }
+    if (!pairs.length) { note('보드 값과 다른 입력 칸이 없습니다.'); return; }
+    if (!confirm('운전 중에도 바로 적용됩니다. 보낼 값:\n' + pairs.map(p => 'TUN ' + p[0] + '=' + p[1]).join('\n') + '\n\n보드를 리셋하면 기본값으로 돌아갑니다. 보낼까요?')) return;
+    tunSend(pairs);
+  });
+  $('sugg').addEventListener('click', ev => {
+    const b = ev.target.closest('button[data-n]'); if (!b) return;
+    const n = b.dataset.n, v = +b.dataset.v;
+    setTunInput(n, v); tunDirty[n] = true;
+    if (b.dataset.send === '1') {
+      if (!confirm('보드에 TUN ' + n + '=' + v + ' 를 보냅니다. 운전 중에도 바로 적용됩니다. 보낼까요?')) { renderTune(); return; }
+      tunSend([[n, v]]);
+    }
+    renderTune();
+  });
+
+  // PC 저장
+  $('btnSaveLog').addEventListener('click', () => {
+    if (!rawLog.length) { note('저장할 수신 줄이 없습니다.'); return; }
+    download('dcs_uart_' + fileStamp() + '.txt', rawText(), 'text/plain;charset=utf-8');
+  });
+  $('btnSaveRst').addEventListener('click', () => {
+    if (!resets.length) { note('저장할 리셋 기록이 없습니다.'); return; }
+    download('dcs_reset_' + fileStamp() + '.csv', rstCsv(), 'text/csv;charset=utf-8');
+  });
+  if ('showSaveFilePicker' in window) $('btnAuto').hidden = false;
+  $('btnAuto').addEventListener('click', async () => {
+    if (autoHandle) { await autoFlush(); autoHandle = null; $('btnAuto').textContent = '자동 저장'; note('자동 저장을 멈췄습니다.'); return; }
+    try {
+      autoHandle = await window.showSaveFilePicker({ suggestedName: 'dcs_uart_auto_' + fileStamp() + '.txt', types: [{ description: 'UART 로그', accept: { 'text/plain': ['.txt', '.log'] } }] });
+    } catch (e) { autoHandle = null; return; }
+    // 지금까지 받은 줄부터 먼저 씀
+    autoBuf = '﻿' + (rawLog.length ? rawText() : '');
+    await autoFlush();
+    $('btnAuto').textContent = '자동 저장 중 (끄기)';
+    note('자동 저장 중: 받은 줄을 PC 시간과 함께 5초마다 이어 씁니다. [RST] 줄은 바로 씁니다. 페이지를 닫기 전에 "자동 저장 중 (끄기)"를 눌러 마무리하세요.');
+  });
+  window.addEventListener('beforeunload', (ev) => { if (autoHandle && autoBuf) { autoFlush(); ev.preventDefault(); ev.returnValue = ''; } });
+  $('btnWdt').addEventListener('click', () => {
+    if (!confirm('보드에 !WDT 를 보내 메인 루프를 멈춥니다. 약 0.2초 뒤 워치독 리셋이 걸립니다.\nREMOTE 운전 중이면 웜 리스타트 시험, 아니면 cold 부팅이 됩니다. 계속할까요?')) return;
+    sendCmd('!WDT');
+    note('!WDT 보냄. 응답([RST] test)이 없으면 Nu-Link TX → 보드 RxD1(PA5) 배선과 펌웨어 RST_TEST_CMD 스위치를 확인하세요.');
   });
 
   // ---------- 시작 ----------
